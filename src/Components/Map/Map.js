@@ -2,6 +2,7 @@ import { chain, sample } from 'lodash';
 import React, { Component } from 'react';
 import tileData from '../../tileData.json';
 import './Map.css';
+import Tile from '../Tile/Tile';
 
 class Map extends Component {
   state = {
@@ -240,31 +241,7 @@ class Map extends Component {
         <div className="map" style={{
           transform: `translate(${mapX}px, ${mapY}px) scale(${scale})`,
         }}>
-          {tiles.map(({ name, x, y, rotation }) => (
-            <div
-              key={name}
-              className="tile"
-              data-tile={name}
-              style={{
-                top: y,
-                left: x,
-                width: tileData[name].width,
-                height: tileData[name].height,
-                backgroundImage: `url(images/tiles/${name}.png)`,
-                transform: `rotate(${rotation}deg)`
-              }}
-            >
-                <div className="origin" />
-                {tileData[name].anchors.map((pos, index) => (
-                  <div
-                    key={`${name}${pos}`}
-                    id={`${name}-${index}`}
-                    className="anchor"
-                    style={{ top: pos[1], left: pos[0] }}
-                  />
-                ))}
-            </div>
-          ))}
+          {tiles.map(tile => <Tile key={tile.name} {...tile} />)}
         </div>
       </div>
     )

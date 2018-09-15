@@ -1,0 +1,19 @@
+.tile {
+  position: absolute;
+}
+
+.tile .anchor {
+  position: absolute;
+  width: 75px;
+  height: 75px;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+}
+
+.origin {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 0px;
+  height: 0px;
+}
