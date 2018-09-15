@@ -6,13 +6,13 @@ import './Map.css';
 class Map extends Component {
   state = {
     availableHooks: [],
+    mapX: 0,
+    mapY: 0,
     scale: .35,
     selectedTile: '',
     selectedTileCoords: '0px, 0px',
     selectedTileRotation: 0,
     tiles: [],
-    tilesX: 0,
-    tilesY: 0,
   }
 
   componentDidMount() {
@@ -77,16 +77,14 @@ class Map extends Component {
     const { isPanning } = this.state;
 
     if (isPanning) {
-      const deltaX = (clientX - this.state.panX) * 1;
-      const deltaY = (clientY - this.state.panY) * 1;
+      const deltaX = clientX - this.state.panX;
+      const deltaY = clientY - this.state.panY;
 
-      console.log('deltaX', deltaX, 'deltaY', deltaY);
-
-      this.setState(({ tilesX, tilesY }) => ({
+      this.setState(({ mapX, mapY }) => ({
+        mapX: mapX + deltaX,
+        mapY: mapY + deltaY,
         panX: clientX,
         panY: clientY,
-        tilesX: tilesX + deltaX,
-        tilesY: tilesY + deltaY,
       }));
     }
 
@@ -119,13 +117,19 @@ class Map extends Component {
   }
 
   placeSelectedTile(x, y) {
-    const { scale, selectedTile, selectedTileRotation } = this.state;
+    const {
+      scale,
+      selectedTile,
+      selectedTileRotation,
+      mapX,
+      mapY,
+    } = this.state;
     const selectedTileData = tileData[selectedTile];
 
     const tile = {
       name: selectedTile,
-      x: x - ((selectedTileData.width * scale) / 2),
-      y: y - ((selectedTileData.height * scale) / 2),
+      x: (x / scale) - (selectedTileData.width / 2) - (mapX / scale),
+      y: (y / scale) - (selectedTileData.height / 2) - (mapY / scale),
       rotation: selectedTileRotation % 360,
     }
 
@@ -185,12 +189,12 @@ class Map extends Component {
 
     if (!match) return;
 
-    this.setState(prevState => {
-      const tiles = [ ...prevState.tiles ];
+    this.setState(({ scale, tiles: prevTiles }) => {
+      const tiles = [ ...prevTiles ];
       const updatedTile = tiles.find(({ name }) => tile.name === name);
 
-      updatedTile.x -= match.xOffset;
-      updatedTile.y -= match.yOffset;
+      updatedTile.x -= (match.xOffset / scale);
+      updatedTile.y -= (match.yOffset / scale);
 
       return { tiles };
     });
@@ -198,18 +202,18 @@ class Map extends Component {
 
   render() {
     const {
+      mapX,
+      mapY,
       scale,
       selectedTile,
       selectedTileCoords,
       selectedTileRotation,
       tiles,
-      tilesX,
-      tilesY,
     } = this.state;
 
     return (
       <div
-        className="map"
+        className="map__wrapper"
         onMouseDown={this.handleMouseDown}
         onMouseUp={this.handleMouseUp}
         onMouseMove={this.handleMouseMove}
@@ -233,31 +237,23 @@ class Map extends Component {
             />
           </div>
         )}
-        <div className="tiles" style={{
-          transform: `translate(${tilesX}px, ${tilesY}px)`,
+        <div className="map" style={{
+          transform: `translate(${mapX}px, ${mapY}px) scale(${scale})`,
         }}>
           {tiles.map(({ name, x, y, rotation }) => (
             <div
               key={name}
-              className="tile__wrapper"
+              className="tile"
+              data-tile={name}
               style={{
                 top: y,
                 left: x,
-                width: tileData[name].width * scale,
-                height: tileData[name].height * scale,
+                width: tileData[name].width,
+                height: tileData[name].height,
+                backgroundImage: `url(images/tiles/${name}.png)`,
                 transform: `rotate(${rotation}deg)`
               }}
             >
-              <div
-                className="tile"
-                data-tile={name}
-                style={{
-                  width: tileData[name].width,
-                  height: tileData[name].height,
-                  backgroundImage: `url(images/tiles/${name}.png)`,
-                  transform: `scale(${scale})`,
-                }}
-              >
                 <div className="origin" />
                 {tileData[name].anchors.map((pos, index) => (
                   <div
@@ -267,7 +263,6 @@ class Map extends Component {
                     style={{ top: pos[1], left: pos[0] }}
                   />
                 ))}
-              </div>
             </div>
           ))}
         </div>
