@@ -1,0 +1,65 @@
+.map {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  height: 100%;
+  background: #ccc;
+}
+
+.selectedTile__wrapper {
+  position: absolute;
+  z-index: 1000;
+  opacity: 0.75;
+  transform-origin: 0 0;
+}
+
+.selectedTile {
+  transform-origin: 0 0;
+}
+
+.selectedTile img {
+  width: 50%;
+}
+
+.tile__wrapper {
+  position: absolute;
+}
+
+.tile {
+  background-size: 100%;
+  transform-origin: 0 0;
+}
+
+.tile .anchor {
+  position: absolute;
+  width: 75px;
+  height: 75px;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+}
+
+.hex {
+  position: absolute;
+  width: 185px;
+  height: 185px;
+  background: red;
+  border-radius: 50%;
+  transform: translate(-50%, 50%);
+}
+
+.origin {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 0px;
+  height: 0px;
+}
+
+.dot {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  background: red;
+}
