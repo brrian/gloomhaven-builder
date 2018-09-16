@@ -25,7 +25,7 @@ class Tile extends Component {
         }}
       >
         <div className="origin" />
-        {anchors.map(([ top, left ], index) => (
+        {anchors.map(([ left, top ], index) => (
           <div
             key={`${top}${left}`}
             id={`${name}-${index}`}
