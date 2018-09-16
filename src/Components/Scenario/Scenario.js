@@ -1,4 +1,4 @@
-import { chain } from 'lodash';
+import { chain, isEqual } from 'lodash';
 import React, { Component } from 'react';
 import tileData from '../../tileData.json';
 import Tile from '../Tile/Tile';
@@ -76,12 +76,17 @@ class Scenario extends Component {
       const { x: anchorX, y: anchorY } = anchorEl.getBoundingClientRect();
       const { x: hookX, y: hookY } = hookEl.getBoundingClientRect();
 
-      this.setState(({ tiles: prevTiles }) => {
+      this.setState(({ availableConnections: prevConnections, tiles: prevTiles }) => {
         const tiles = [ ...prevTiles ];
+
         const updatedHook = tiles.find(({ name }) => name === hook.tile);
         updatedHook.x += (anchorX - hookX) / scale;
         updatedHook.y += (anchorY - hookY) / scale;
-        return { tiles }
+
+        const availableConnections = prevConnections.filter(connection =>
+          !(isEqual(connection, anchor) || isEqual(connection, hook)));
+
+        return { availableConnections, tiles }
       }, resolve);
     });
   }
