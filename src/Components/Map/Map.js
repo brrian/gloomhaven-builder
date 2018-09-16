@@ -1,19 +1,25 @@
-import { chain, sample } from 'lodash';
-import React, { Component } from 'react';
+import { sample } from 'lodash';
+import React, { Component, createRef } from 'react';
 import tileData from '../../tileData.json';
 import './Map.css';
-import Tile from '../Tile/Tile';
+import sampleScenario from './sample-scenario.json';
+import Scenario from '../Scenario/Scenario';
 
 class Map extends Component {
   state = {
-    availableHooks: [],
     mapX: 0,
     mapY: 0,
     scale: .35,
+    scenario: sampleScenario,
     selectedTile: '',
     selectedTileCoords: '0px, 0px',
     selectedTileRotation: 0,
-    tiles: [],
+  };
+
+  constructor(props) {
+    super(props);
+
+    this.scenario = createRef();
   }
 
   componentDidMount() {
@@ -21,9 +27,9 @@ class Map extends Component {
   }
 
   handleMapClick = (event) => {
-    const { scale, selectedTile } = this.state;
+    const { scale, selectedTile, selectedTileRotation } = this.state;
 
-    if (event.target.dataset.tile) {
+    if (false && event.target.dataset.tile) {
       const data = tileData[event.target.dataset.tile];
       const tile = this.state.tiles.find(({ name }) => name === event.target.dataset.tile);
 
@@ -53,7 +59,10 @@ class Map extends Component {
     }
 
     if (selectedTile) {
-      this.placeSelectedTile(event.clientX, event.clientY);
+      this.scenario.current.placeTile(selectedTile, event.clientX, event.clientY, selectedTileRotation)
+        .then(() => this.scenario.current.connectPlacedTileIfPossible(selectedTile));
+
+      this.setState({ selectedTile: null, selectedTileRotation: 0 });
     }
   }
 
@@ -117,99 +126,15 @@ class Map extends Component {
     }
   }
 
-  placeSelectedTile(x, y) {
-    const {
-      scale,
-      selectedTile,
-      selectedTileRotation,
-      mapX,
-      mapY,
-    } = this.state;
-    const selectedTileData = tileData[selectedTile];
-
-    const tile = {
-      name: selectedTile,
-      x: (x / scale) - (selectedTileData.width / 2) - (mapX / scale),
-      y: (y / scale) - (selectedTileData.height / 2) - (mapY / scale),
-      rotation: selectedTileRotation % 360,
-    }
-
-    const hooks = selectedTileData.anchors.map((pos, index) => `${selectedTile}-${index}`);
-
-    this.setState(prevState => ({
-      selectedTile: null,
-      selectedTileRotation: 0,
-      tiles: [ ...prevState.tiles, tile ],
-      availableHooks: [
-        ...prevState.availableHooks,
-        ...hooks,
-      ]
-    }), this.connectPlacedTileIfPossible.bind(this, tile, hooks));
-  }
-
-  connectPlacedTileIfPossible(tile, tileAnchors) {
-    const { availableHooks } = this.state;
-
-    const anchors = tileAnchors.map(id => ({ id, bounds: document.getElementById(id).getBoundingClientRect() }));
-
-    const hooks = availableHooks
-      .filter(id => id.indexOf(tile.name) === -1)
-      .map(id => ({ id, bounds: document.getElementById(id).getBoundingClientRect() }));
-
-    const match = chain(anchors)
-      .map(anchor => hooks.map(hook => {
-        const leftBounds = anchor.bounds.right - hook.bounds.left;
-        const rightBounds = anchor.bounds.left - hook.bounds.right;
-        const topBounds = anchor.bounds.top - hook.bounds.bottom;
-        const bottomBounds = anchor.bounds.bottom - hook.bounds.top;
-
-        const doesOverlap = leftBounds > 0 && rightBounds < 0 && topBounds < 0 && bottomBounds > 0;
-        const closeness = Math.abs(leftBounds + rightBounds + topBounds + bottomBounds);
-
-        const anchorXMidpoint = anchor.bounds.left + (anchor.bounds.width / 2);
-        const anchorYMidpoint = anchor.bounds.top + (anchor.bounds.height / 2);
-
-        const hookXMidpoint = hook.bounds.left + (hook.bounds.width / 2);
-        const hookYMidpoint = hook.bounds.top + (hook.bounds.height / 2);
-
-        return doesOverlap ?
-          {
-             anchor: anchor.id,
-             hook: hook.id,
-             xOffset: anchorXMidpoint - hookXMidpoint,
-             yOffset: anchorYMidpoint - hookYMidpoint,
-             closeness,
-          }
-          : false;
-      }))
-      .flatten()
-      .compact()
-      .sortBy('closeness')
-      .first()
-      .value();
-
-    if (!match) return;
-
-    this.setState(({ scale, tiles: prevTiles }) => {
-      const tiles = [ ...prevTiles ];
-      const updatedTile = tiles.find(({ name }) => tile.name === name);
-
-      updatedTile.x -= (match.xOffset / scale);
-      updatedTile.y -= (match.yOffset / scale);
-
-      return { tiles };
-    });
-  }
-
   render() {
     const {
       mapX,
       mapY,
       scale,
+      scenario,
       selectedTile,
       selectedTileCoords,
       selectedTileRotation,
-      tiles,
     } = this.state;
 
     return (
@@ -241,7 +166,7 @@ class Map extends Component {
         <div className="map" style={{
           transform: `translate(${mapX}px, ${mapY}px) scale(${scale})`,
         }}>
-          {tiles.map(tile => <Tile key={tile.name} {...tile} />)}
+          <Scenario ref={this.scenario} {...scenario} map={{ scale, x: mapX, y: mapY }} />
         </div>
       </div>
     )

@@ -1,0 +1,392 @@
+{
+  "tiles":[
+    {
+      "name":"l3a",
+      "rotation":270,
+      "visible":true,
+      "monsters":[
+        {
+          "name":"inox-guard",
+          "pos":[
+            1,
+            3
+          ],
+          "spawnAt":4
+        },
+        {
+          "name":"inox-guard",
+          "pos":[
+            2,
+            3
+          ],
+          "spawnAt":3
+        },
+        {
+          "name":"inox-guard",
+          "pos":[
+            2,
+            4
+          ],
+          "spawnAt":3
+        },
+        {
+          "name":"inox-guard",
+          "pos":[
+            3,
+            5
+          ]
+        },
+        {
+          "name":"inox-guard",
+          "pos":[
+            4,
+            4
+          ]
+        },
+        {
+          "name":"inox-guard",
+          "pos":[
+            5,
+            5
+          ]
+        },
+        {
+          "name":"inox-guard",
+          "pos":[
+            6,
+            3
+          ],
+          "spawnAt":3
+        },
+        {
+          "name":"inox-guard",
+          "pos":[
+            6,
+            4
+          ],
+          "spawnAt":3
+        },
+        {
+          "name":"inox-guard",
+          "pos":[
+            7,
+            3
+          ],
+          "spawnAt":4
+        }
+      ],
+      "tokens":[
+        {
+          "name":"start-hex-h",
+          "pos":[
+            3,
+            1
+          ],
+          "rotation":90
+        },
+        {
+          "name":"start-hex-h",
+          "pos":[
+            3,
+            2
+          ],
+          "rotation":90
+        },
+        {
+          "name":"start-hex-h",
+          "pos":[
+            4,
+            1
+          ],
+          "rotation":90,
+          "center":true
+        },
+        {
+          "name":"start-hex-h",
+          "pos":[
+            5,
+            1
+          ],
+          "rotation":90
+        },
+        {
+          "name":"start-hex-h",
+          "pos":[
+            5,
+            2
+          ],
+          "rotation":90
+        },
+        {
+          "name":"wood-door-closed",
+          "pos":[
+            8,
+            3
+          ],
+          "click":[
+            "toggleTile",
+            "b4a"
+          ]
+        },
+        {
+          "name":"wood-door-closed",
+          "pos":[
+            0,
+            3
+          ],
+          "rotation":180,
+          "click":[
+            "toggleTile",
+            "b2a"
+          ]
+        },
+        {
+          "name":"corridor-earth-2h",
+          "pos":[
+            1,
+            5
+          ],
+          "rotation":0
+        },
+        {
+          "name":"corridor-earth",
+          "pos":[
+            2,
+            5
+          ],
+          "rotation":0
+        },
+        {
+          "name":"corridor-earth-2h",
+          "pos":[
+            7,
+            5
+          ],
+          "rotation":0
+        },
+        {
+          "name":"corridor-earth",
+          "pos":[
+            6,
+            5
+          ],
+          "rotation":0
+        },
+        {
+          "name":"totem",
+          "pos":[
+            3,
+            6
+          ],
+          "rotation":0
+        },
+        {
+          "name":"totem",
+          "pos":[
+            4,
+            5
+          ],
+          "rotation":0
+        },
+        {
+          "name":"totem",
+          "pos":[
+            5,
+            6
+          ],
+          "rotation":0
+        },
+        {
+          "name":"thorns",
+          "pos":[
+            1,
+            5
+          ],
+          "rotation":0
+        },
+        {
+          "name":"thorns",
+          "pos":[
+            7,
+            2
+          ],
+          "rotation":0
+        }
+      ]
+    },
+    {
+      "name":"l1b",
+      "rotation":270,
+      "visible":true,
+      "monsters":[
+
+      ],
+      "tokens":[
+        {
+          "name":"dark-fog",
+          "pos":[
+            4,
+            5
+          ]
+        },
+        {
+          "name":"scenario-1",
+          "pos":[
+            4,
+            5
+          ],
+          "rotation":90
+        },
+        {
+          "name":"scenario-a",
+          "pos":[
+            4,
+            4
+          ],
+          "rotation":90
+        }
+      ]
+    },
+    {
+      "name":"e1b",
+      "rotation":90,
+      "monsters":[
+
+      ],
+      "tokens":[
+
+      ]
+    },
+    {
+      "name":"b2a",
+      "rotation":270,
+      "monsters":[
+
+      ],
+      "tokens":[
+
+      ]
+    },
+    {
+      "name":"b4a",
+      "rotation":90,
+      "monsters":[
+        {
+          "name":"inox-archer",
+          "pos":[
+            2,
+            2
+          ],
+          "spawnAt":4
+        },
+        {
+          "name":"inox-guard",
+          "pos":[
+            3,
+            2
+          ],
+          "eliteAt":3
+        }
+      ],
+      "tokens":[
+        {
+          "name":"barrel",
+          "pos":[
+            2,
+            0
+          ]
+        },
+        {
+          "name":"coin",
+          "pos":[
+            1,
+            3
+          ],
+          "rotation":-90
+        }
+      ]
+    },
+    {
+      "name":"b1a",
+      "rotation":270,
+      "monsters":[
+
+      ],
+      "tokens":[
+
+      ]
+    },
+    {
+      "name":"b3a",
+      "rotation":90,
+      "monsters":[
+
+      ],
+      "tokens":[
+
+      ]
+    }
+  ],
+  "connections":[
+    {
+      "anchor": {
+        "tile": "l3a",
+        "index": 3
+      },
+      "hook": {
+        "tile": "l1b",
+        "index": 1
+      }
+    },
+    {
+      "anchor": {
+        "tile": "l3a",
+        "index": 0
+      },
+      "hook": {
+        "tile": "b2a",
+        "index": 2
+      }
+    },
+    {
+      "anchor": {
+        "tile": "l3a",
+        "index": 2
+      },
+      "hook": {
+        "tile": "b4a",
+        "index": 2
+      }
+    },
+    {
+      "anchor": {
+        "tile": "l1b",
+        "index": 3
+      },
+      "hook": {
+        "tile": "e1b",
+        "index": 2
+      }
+    },
+    {
+      "anchor": {
+        "tile": "l1b",
+        "index": 0
+      },
+      "hook": {
+        "tile": "b1a",
+        "index": 2
+      }
+    },
+    {
+      "anchor": {
+        "tile": "l1b",
+        "index": 2
+      },
+      "hook": {
+        "tile": "b3a",
+        "index": 2
+      }
+    }
+  ]
+}

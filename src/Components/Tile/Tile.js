@@ -5,7 +5,9 @@ import './Tile.css';
 class Tile extends Component {
   state = {
     ...tileData[this.props.name],
-  }
+  };
+
+  anchors = {};
 
   render() {
     const { name, rotation, x, y } = this.props;
@@ -25,8 +27,9 @@ class Tile extends Component {
         }}
       >
         <div className="origin" />
-        {anchors.map(([ top, left ], index) => (
+        {anchors.map(([ left, top ], index) => (
           <div
+            ref={el => this.anchors[index] = el}
             key={`${top}${left}`}
             id={`${name}-${index}`}
             className="anchor"
