@@ -5,9 +5,11 @@ import Tile from '../Tile/Tile';
 
 class Scenario extends Component {
   state = {
-    availableHooks: [],
+    availableConnections: [],
     tiles: [],
   };
+
+  tileRefs = {};
 
   componentDidMount() {
     const { connections } = this.props;
@@ -59,12 +61,9 @@ class Scenario extends Component {
 
       const hooks = anchors.map((pos, index) => `${name}-${index}`);
 
-      this.setState(prevState => ({
-        tiles: [...prevState.tiles, tile],
-        availableHooks: [
-          ...prevState.availableHooks,
-          ...hooks,
-        ],
+      this.setState(({ availableConnections, tiles: prevTiles }) => ({
+        tiles: [...tiles, tile],
+        availableConnections: [ ...availableConnections, ...hooks ],
       }), resolve);
     });
   }
@@ -72,10 +71,11 @@ class Scenario extends Component {
   connectTile(connection) {
     return new Promise((resolve, reject) => {
       const { map: { scale } } = this.props;
-      const [ hookTile ] = connection.hook.split('-');
+      const [ anchorTile, anchorIndex ] = connection.anchor.split('-');
+      const [ hookTile, hookIndex ] = connection.hook.split('-');
 
-      const anchor = document.getElementById(connection.anchor);
-      const hook = document.getElementById(connection.hook);
+      const anchor = this.tileRefs[anchorTile].anchors[anchorIndex];
+      const hook = this.tileRefs[hookTile].anchors[hookIndex];
 
       const { x: anchorX, y: anchorY } = anchor.getBoundingClientRect();
       const { x: hookX, y: hookY } = hook.getBoundingClientRect();
@@ -91,15 +91,29 @@ class Scenario extends Component {
   }
 
   connectPlacedTileIfPossible(tile) {
-    const { availableHooks } = this.state;
+    const { availableConnections } = this.state;
 
-    const anchors = availableHooks
-      .filter(id => id.indexOf(tile) === -1)
-      .map(id => ({ id, bounds: document.getElementById(id).getBoundingClientRect() }));
+    const connections = availableConnections.reduce((prev, cur) => {
+      const target = cur.indexOf(tile) === -1 ? 'anchors' : 'hooks';
+      prev[target].push(cur);
+      return prev;
+    }, { anchors: [], hooks: [] });
 
-    const hooks = availableHooks
-      .filter(id => id.indexOf(tile) !== -1)
-      .map(id => ({ id, bounds: document.getElementById(id).getBoundingClientRect() }));
+    const anchors = connections.anchors.map(connection => {
+      const [tile, point] = connection.split('-');
+      return {
+        id: connection,
+        bounds: this.tileRefs[tile].anchors[point].getBoundingClientRect(),
+      };
+    });
+
+    const hooks = connections.hooks.map(connection => {
+      const [tile, point] = connection.split('-');
+      return {
+        id: connection,
+        bounds: this.tileRefs[tile].anchors[point].getBoundingClientRect(),
+      };
+    });
 
     const match = chain(anchors)
       .map(anchor => hooks.map(hook => {
@@ -125,7 +139,9 @@ class Scenario extends Component {
 
     return (
       <div>
-        {tiles.map(tile => <Tile key={tile.name} {...tile} />)}
+        {tiles.map(tile =>
+          <Tile ref={el => this.tileRefs[tile.name] = el} key={tile.name} {...tile} />
+        )}
       </div>
     );
   }
