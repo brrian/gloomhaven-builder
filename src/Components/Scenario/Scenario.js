@@ -27,14 +27,15 @@ class Scenario extends Component {
 
     connections.reduce((promiseChain, connection) => {
       const { anchor, hook } = connection;
-
-      const anchorData = tiles.find(tile => tile.name === anchor.tile);
-      const hookData = tiles.find(tile => tile.name === hook.tile);
+      const {
+        [anchor.tile]: { rotation: anchorRotation },
+        [hook.tile]: { rotation: hookRotation },
+      } = tiles;
 
       return promiseChain.then((chainResults) => {
         const connectionPromise = Promise.all([
-          this.placeTile(anchor.tile, screenXMidpoint, screenYMidpoint, anchorData.rotation),
-          this.placeTile(hook.tile, screenXMidpoint, screenYMidpoint, hookData.rotation),
+          this.placeTile(anchor.tile, screenXMidpoint, screenYMidpoint, anchorRotation),
+          this.placeTile(hook.tile, screenXMidpoint, screenYMidpoint, hookRotation),
         ]).then(this.connectTile.bind(this, connection));
 
         return connectionPromise.then(result => [...chainResults, result]);

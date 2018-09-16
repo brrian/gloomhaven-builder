@@ -1,6 +1,6 @@
 {
-  "tiles":[
-    {
+  "tiles":{
+    "l3a": {
       "name":"l3a",
       "rotation":270,
       "visible":true,
@@ -214,7 +214,7 @@
         }
       ]
     },
-    {
+    "l1b": {
       "name":"l1b",
       "rotation":270,
       "visible":true,
@@ -247,7 +247,7 @@
         }
       ]
     },
-    {
+    "e1b": {
       "name":"e1b",
       "rotation":90,
       "monsters":[
@@ -257,7 +257,7 @@
 
       ]
     },
-    {
+    "b2a": {
       "name":"b2a",
       "rotation":270,
       "monsters":[
@@ -267,7 +267,7 @@
 
       ]
     },
-    {
+    "b4a": {
       "name":"b4a",
       "rotation":90,
       "monsters":[
@@ -306,7 +306,7 @@
         }
       ]
     },
-    {
+    "b1a": {
       "name":"b1a",
       "rotation":270,
       "monsters":[
@@ -316,7 +316,7 @@
 
       ]
     },
-    {
+    "b3a": {
       "name":"b3a",
       "rotation":90,
       "monsters":[
@@ -326,7 +326,7 @@
 
       ]
     }
-  ],
+  },
   "connections":[
     {
       "anchor": {
