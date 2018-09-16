@@ -1,8 +1,9 @@
 import { chain, sample } from 'lodash';
 import React, { Component } from 'react';
 import tileData from '../../tileData.json';
-import './Map.css';
 import Tile from '../Tile/Tile';
+import './Map.css';
+import sampleScenario from './sample-scenario.json';
 
 class Map extends Component {
   state = {
@@ -10,18 +11,23 @@ class Map extends Component {
     mapX: 0,
     mapY: 0,
     scale: .35,
+    scenario: sampleScenario,
     selectedTile: '',
     selectedTileCoords: '0px, 0px',
     selectedTileRotation: 0,
     tiles: [],
-  }
+  };
 
   componentDidMount() {
     document.addEventListener('keydown', this.handleKeyDown);
+
+    if (this.state.scenario.connections.length) {
+      this.placeExistingTiles();
+    }
   }
 
   handleMapClick = (event) => {
-    const { scale, selectedTile } = this.state;
+    const { scale, selectedTile, selectedTileRotation } = this.state;
 
     if (event.target.dataset.tile) {
       const data = tileData[event.target.dataset.tile];
@@ -53,7 +59,8 @@ class Map extends Component {
     }
 
     if (selectedTile) {
-      this.placeSelectedTile(event.clientX, event.clientY);
+      this.placeTile(selectedTile, event.clientX, event.clientY, selectedTileRotation)
+        .then(this.connectPlacedTileIfPossible.bind(this, selectedTile));
     }
   }
 
@@ -117,43 +124,89 @@ class Map extends Component {
     }
   }
 
-  placeSelectedTile(x, y) {
-    const {
-      scale,
-      selectedTile,
-      selectedTileRotation,
-      mapX,
-      mapY,
-    } = this.state;
-    const selectedTileData = tileData[selectedTile];
+  placeExistingTiles() {
+    const { scenario: { connections } } = this.state;
 
-    const tile = {
-      name: selectedTile,
-      x: (x / scale) - (selectedTileData.width / 2) - (mapX / scale),
-      y: (y / scale) - (selectedTileData.height / 2) - (mapY / scale),
-      rotation: selectedTileRotation % 360,
-    }
+    const screenXMidpoint = window.innerWidth /2;
+    const screenYMidpoint = window.innerHeight /2;
 
-    const hooks = selectedTileData.anchors.map((pos, index) => `${selectedTile}-${index}`);
+    connections.reduce((promiseChain, connection) => {
+      const { anchor, hook } = connection;
+      const [ anchorTile ] = anchor.split('-');
+      const [ hookTile ] = hook.split('-');
 
-    this.setState(prevState => ({
-      selectedTile: null,
-      selectedTileRotation: 0,
-      tiles: [ ...prevState.tiles, tile ],
-      availableHooks: [
-        ...prevState.availableHooks,
-        ...hooks,
-      ]
-    }), this.connectPlacedTileIfPossible.bind(this, tile, hooks));
+      const anchorData = this.state.scenario.tiles.find(tile => tile.name === anchorTile);
+      const hookData = this.state.scenario.tiles.find(tile => tile.name === hookTile);
+
+      return promiseChain.then(chainResults => {
+        const connectionPromise = Promise.all([
+          this.placeTile(anchorTile, screenXMidpoint, screenYMidpoint, anchorData.rotation),
+          this.placeTile(hookTile, screenXMidpoint, screenYMidpoint, hookData.rotation),
+        ]).then(this.connectTile.bind(this, connection));
+
+        return connectionPromise.then(result => [ ...chainResults, result ])
+      }
+      );
+    }, Promise.resolve([]));
   }
 
-  connectPlacedTileIfPossible(tile, tileAnchors) {
+  placeTile(name, x, y, rotation) {
+    return new Promise((resolve, reject) => {
+      const { scale, tiles, mapX, mapY } = this.state;
+      const { anchors, width, height } = tileData[name];
+
+      if (tiles.find(tile => tile.name === name)) return resolve();
+
+      const tile = {
+        name,
+        x: (x / scale) - (width / 2) - (mapX / scale),
+        y: (y / scale) - (height / 2) - (mapY / scale),
+        rotation: rotation % 360,
+      }
+
+      const hooks = anchors.map((pos, index) => `${name}-${index}`);
+
+      this.setState(prevState => ({
+        selectedTile: null,
+        selectedTileRotation: 0,
+        tiles: [ ...prevState.tiles, tile ],
+        availableHooks: [
+          ...prevState.availableHooks,
+          ...hooks,
+        ]
+      }), resolve);
+    });
+  }
+
+  connectTile(connection) {
+    return new Promise((resolve, reject) => {
+      const [ hookTile ] = connection.hook.split('-');
+
+      const anchor = document.getElementById(connection.anchor);
+      const hook = document.getElementById(connection.hook);
+
+      const { x: anchorX, y: anchorY } = anchor.getBoundingClientRect();
+      const { x: hookX, y: hookY } = hook.getBoundingClientRect();
+
+      this.setState(({ scale, tiles: prevTiles }) => {
+        const tiles = [ ...prevTiles ];
+        const updatedHook = tiles.find(({ name }) => name === hookTile);
+        updatedHook.x += (anchorX - hookX) / scale;
+        updatedHook.y += (anchorY - hookY) / scale;
+        return { tiles }
+      }, resolve);
+    });
+  }
+
+  connectPlacedTileIfPossible(tile) {
     const { availableHooks } = this.state;
 
-    const anchors = tileAnchors.map(id => ({ id, bounds: document.getElementById(id).getBoundingClientRect() }));
+    const anchors = availableHooks
+      .filter(id => id.indexOf(tile) === -1)
+      .map(id => ({ id, bounds: document.getElementById(id).getBoundingClientRect() }));
 
     const hooks = availableHooks
-      .filter(id => id.indexOf(tile.name) === -1)
+      .filter(id => id.indexOf(tile) !== -1)
       .map(id => ({ id, bounds: document.getElementById(id).getBoundingClientRect() }));
 
     const match = chain(anchors)
@@ -166,39 +219,13 @@ class Map extends Component {
         const doesOverlap = leftBounds > 0 && rightBounds < 0 && topBounds < 0 && bottomBounds > 0;
         const closeness = Math.abs(leftBounds + rightBounds + topBounds + bottomBounds);
 
-        const anchorXMidpoint = anchor.bounds.left + (anchor.bounds.width / 2);
-        const anchorYMidpoint = anchor.bounds.top + (anchor.bounds.height / 2);
-
-        const hookXMidpoint = hook.bounds.left + (hook.bounds.width / 2);
-        const hookYMidpoint = hook.bounds.top + (hook.bounds.height / 2);
-
-        return doesOverlap ?
-          {
-             anchor: anchor.id,
-             hook: hook.id,
-             xOffset: anchorXMidpoint - hookXMidpoint,
-             yOffset: anchorYMidpoint - hookYMidpoint,
-             closeness,
-          }
-          : false;
+        return doesOverlap ? { anchor: anchor.id, hook: hook.id, closeness } : false;
       }))
-      .flatten()
-      .compact()
-      .sortBy('closeness')
-      .first()
-      .value();
+      .flatten().compact().sortBy('closeness').first().value();
 
-    if (!match) return;
-
-    this.setState(({ scale, tiles: prevTiles }) => {
-      const tiles = [ ...prevTiles ];
-      const updatedTile = tiles.find(({ name }) => tile.name === name);
-
-      updatedTile.x -= (match.xOffset / scale);
-      updatedTile.y -= (match.yOffset / scale);
-
-      return { tiles };
-    });
+    if (match) {
+      this.connectTile(match);
+    }
   }
 
   render() {
