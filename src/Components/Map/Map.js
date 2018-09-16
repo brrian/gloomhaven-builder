@@ -99,9 +99,8 @@ class Map extends Component {
     }
 
     if (selectedTile) {
-      this.setState({
-        selectedTileCoords: `${clientX}px, ${clientY}px`,
-      })
+      const { x, y } = this.getAbsCoords(clientX, clientY);
+      this.setState({ selectedTileCoords: `${x}px, ${y}px` });
     }
   }
 
@@ -124,6 +123,15 @@ class Map extends Component {
         selectedTile: nextTile.name,
       });
     }
+  }
+
+  getAbsCoords = (x, y) => {
+    const { mapX, mapY, scale } = this.state;
+
+    return {
+      x: (x / scale) - (mapX / scale),
+      y: (y / scale) - (mapY / scale),
+    };
   }
 
   render() {
@@ -163,10 +171,12 @@ class Map extends Component {
             />
           </div>
         )}
-        <div className="map" style={{
-          transform: `translate(${mapX}px, ${mapY}px) scale(${scale})`,
-        }}>
-          <Scenario ref={this.scenario} {...scenario} map={{ scale, x: mapX, y: mapY }} />
+          <Scenario
+            ref={this.scenario}
+            getAbsCoords={this.getAbsCoords}
+            scale={scale}
+            {...scenario}
+          />
         </div>
       </div>
     )

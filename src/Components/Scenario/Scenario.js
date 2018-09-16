@@ -45,16 +45,18 @@ class Scenario extends Component {
 
   placeTile(name, x, y, rotation) {
     return new Promise((resolve, reject) => {
-      const { map } = this.props;
+      const { getAbsCoords } = this.props;
       const { tiles } = this.state;
       const { anchors, width, height } = tileData[name];
 
       if (tiles.find(tile => tile.name === name)) return resolve();
 
+      const { x: absX, y: absY } = getAbsCoords(x, y);
+
       const tile = {
         name,
-        x: (x / map.scale) - (width / 2) - (map.x / map.scale),
-        y: (y / map.scale) - (height / 2) - (map.y / map.scale),
+        x: absX - (width / 2),
+        y: absY - (height / 2),
         rotation: rotation % 360,
       };
 
@@ -69,7 +71,7 @@ class Scenario extends Component {
 
   connectTile({ anchor, hook }) {
     return new Promise((resolve, reject) => {
-      const { map: { scale } } = this.props;
+      const { scale } = this.props;
 
       const anchorEl = this.tileRefs[anchor.tile].anchors[anchor.index];
       const hookEl = this.tileRefs[hook.tile].anchors[hook.index];
