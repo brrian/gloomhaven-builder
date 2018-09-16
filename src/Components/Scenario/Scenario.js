@@ -27,16 +27,14 @@ class Scenario extends Component {
 
     connections.reduce((promiseChain, connection) => {
       const { anchor, hook } = connection;
-      const [anchorTile] = anchor.split('-');
-      const [hookTile] = hook.split('-');
 
-      const anchorData = tiles.find(tile => tile.name === anchorTile);
-      const hookData = tiles.find(tile => tile.name === hookTile);
+      const anchorData = tiles.find(tile => tile.name === anchor.tile);
+      const hookData = tiles.find(tile => tile.name === hook.tile);
 
       return promiseChain.then((chainResults) => {
         const connectionPromise = Promise.all([
-          this.placeTile(anchorTile, screenXMidpoint, screenYMidpoint, anchorData.rotation),
-          this.placeTile(hookTile, screenXMidpoint, screenYMidpoint, hookData.rotation),
+          this.placeTile(anchor.tile, screenXMidpoint, screenYMidpoint, anchorData.rotation),
+          this.placeTile(hook.tile, screenXMidpoint, screenYMidpoint, hookData.rotation),
         ]).then(this.connectTile.bind(this, connection));
 
         return connectionPromise.then(result => [...chainResults, result]);
@@ -59,7 +57,7 @@ class Scenario extends Component {
         rotation: rotation % 360,
       };
 
-      const hooks = anchors.map((pos, index) => `${name}-${index}`);
+      const hooks = anchors.map((pos, index) => ({ tile: name, index }));
 
       this.setState(({ availableConnections, tiles: prevTiles }) => ({
         tiles: [...tiles, tile],
@@ -68,21 +66,19 @@ class Scenario extends Component {
     });
   }
 
-  connectTile(connection) {
+  connectTile({ anchor, hook }) {
     return new Promise((resolve, reject) => {
       const { map: { scale } } = this.props;
-      const [ anchorTile, anchorIndex ] = connection.anchor.split('-');
-      const [ hookTile, hookIndex ] = connection.hook.split('-');
 
-      const anchor = this.tileRefs[anchorTile].anchors[anchorIndex];
-      const hook = this.tileRefs[hookTile].anchors[hookIndex];
+      const anchorEl = this.tileRefs[anchor.tile].anchors[anchor.index];
+      const hookEl = this.tileRefs[hook.tile].anchors[hook.index];
 
-      const { x: anchorX, y: anchorY } = anchor.getBoundingClientRect();
-      const { x: hookX, y: hookY } = hook.getBoundingClientRect();
+      const { x: anchorX, y: anchorY } = anchorEl.getBoundingClientRect();
+      const { x: hookX, y: hookY } = hookEl.getBoundingClientRect();
 
       this.setState(({ tiles: prevTiles }) => {
         const tiles = [ ...prevTiles ];
-        const updatedHook = tiles.find(({ name }) => name === hookTile);
+        const updatedHook = tiles.find(({ name }) => name === hook.tile);
         updatedHook.x += (anchorX - hookX) / scale;
         updatedHook.y += (anchorY - hookY) / scale;
         return { tiles }
@@ -94,26 +90,20 @@ class Scenario extends Component {
     const { availableConnections } = this.state;
 
     const connections = availableConnections.reduce((prev, cur) => {
-      const target = cur.indexOf(tile) === -1 ? 'anchors' : 'hooks';
+      const target = cur.tile !== tile ? 'anchors' : 'hooks';
       prev[target].push(cur);
       return prev;
     }, { anchors: [], hooks: [] });
 
-    const anchors = connections.anchors.map(connection => {
-      const [tile, point] = connection.split('-');
-      return {
-        id: connection,
-        bounds: this.tileRefs[tile].anchors[point].getBoundingClientRect(),
-      };
-    });
+    const anchors = connections.anchors.map(({ tile, index }) => ({
+      connection: { tile, index },
+      bounds: this.tileRefs[tile].anchors[index].getBoundingClientRect(),
+    }));
 
-    const hooks = connections.hooks.map(connection => {
-      const [tile, point] = connection.split('-');
-      return {
-        id: connection,
-        bounds: this.tileRefs[tile].anchors[point].getBoundingClientRect(),
-      };
-    });
+    const hooks = connections.hooks.map(({ tile, index }) => ({
+      connection: { tile, index },
+      bounds: this.tileRefs[tile].anchors[index].getBoundingClientRect(),
+    }));
 
     const match = chain(anchors)
       .map(anchor => hooks.map(hook => {
@@ -125,7 +115,9 @@ class Scenario extends Component {
         const doesOverlap = leftBounds > 0 && rightBounds < 0 && topBounds < 0 && bottomBounds > 0;
         const closeness = Math.abs(leftBounds + rightBounds + topBounds + bottomBounds);
 
-        return doesOverlap ? { anchor: anchor.id, hook: hook.id, closeness } : false;
+        return doesOverlap
+          ? { anchor: anchor.connection, hook: hook.connection, closeness }
+          : false;
       }))
       .flatten().compact().sortBy('closeness').first().value();
 

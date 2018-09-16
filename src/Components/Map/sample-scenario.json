@@ -329,28 +329,64 @@
   ],
   "connections":[
     {
-      "anchor":"l3a-3",
-      "hook":"l1b-1"
+      "anchor": {
+        "tile": "l3a",
+        "index": 3
+      },
+      "hook": {
+        "tile": "l1b",
+        "index": 1
+      }
     },
     {
-      "anchor":"l3a-0",
-      "hook":"b2a-2"
+      "anchor": {
+        "tile": "l3a",
+        "index": 0
+      },
+      "hook": {
+        "tile": "b2a",
+        "index": 2
+      }
     },
     {
-      "anchor":"l3a-2",
-      "hook":"b4a-2"
+      "anchor": {
+        "tile": "l3a",
+        "index": 2
+      },
+      "hook": {
+        "tile": "b4a",
+        "index": 2
+      }
     },
     {
-      "anchor":"l1b-3",
-      "hook":"e1b-2"
+      "anchor": {
+        "tile": "l1b",
+        "index": 3
+      },
+      "hook": {
+        "tile": "e1b",
+        "index": 2
+      }
     },
     {
-      "anchor":"l1b-0",
-      "hook":"b1a-2"
+      "anchor": {
+        "tile": "l1b",
+        "index": 0
+      },
+      "hook": {
+        "tile": "b1a",
+        "index": 2
+      }
     },
     {
-      "anchor":"l1b-2",
-      "hook":"b3a-2"
+      "anchor": {
+        "tile": "l1b",
+        "index": 2
+      },
+      "hook": {
+        "tile": "b3a",
+        "index": 2
+      }
     }
   ]
 }
