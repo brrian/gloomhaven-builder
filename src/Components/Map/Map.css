@@ -12,19 +12,22 @@
   position: absolute;
 }
 
-.selectedTile__wrapper {
+.plopper-wrapper {
   position: absolute;
   z-index: 1000;
-  opacity: 0.75;
+  opacity: .75;
+  transform-origin: 0 0;
+  cursor: none;
+}
+
+.plopper {
+  transform: translate(-50%, -50%);
   transform-origin: 0 0;
 }
 
-.selectedTile {
-  transform-origin: 0 0;
-}
-
-.selectedTile img {
-  width: 50%;
+.plopper[data-type="monster"] {
+  width: 200px;
+  height: 200px;
 }
 
 .dot {

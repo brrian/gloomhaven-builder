@@ -1,19 +1,19 @@
 import { sample } from 'lodash';
-import React, { Component, createRef } from 'react';
+import React, { PureComponent, createRef } from 'react';
 import tileData from '../../tileData.json';
 import './Map.css';
 import sampleScenario from './sample-scenario.json';
 import Scenario from '../Scenario/Scenario';
 
-class Map extends Component {
+class Map extends PureComponent {
   state = {
     mapX: 0,
     mapY: 0,
+    plopper: false,
     scale: .35,
     scenario: sampleScenario,
-    selectedTile: '',
-    selectedTileCoords: '0px, 0px',
-    selectedTileRotation: 0,
+    plopperTileCoords: '0px, 0px',
+    plopperRotation: 0,
   };
 
   constructor(props) {
@@ -22,12 +22,18 @@ class Map extends Component {
     this.scenario = createRef();
   }
 
+  get plopperCoords() {
+    const { mouseX, mouseY } = this.state;
+    const { x, y } = this.getAbsCoords(mouseX, mouseY);
+    return `${x}px, ${y}px`;
+  }
+
   componentDidMount() {
     document.addEventListener('keydown', this.handleKeyDown);
   }
 
   handleMapClick = (event) => {
-    const { scale, selectedTile, selectedTileRotation } = this.state;
+    const { plopper, scale } = this.state;
 
     if (false && event.target.dataset.tile) {
       const data = tileData[event.target.dataset.tile];
@@ -58,49 +64,35 @@ class Map extends Component {
       console.log([rank, file], bottom - data.height - data.startHex[1])
     }
 
-    if (selectedTile) {
-      this.scenario.current.placeTile(selectedTile, event.clientX, event.clientY, selectedTileRotation)
-        .then(() => this.scenario.current.connectPlacedTileIfPossible(selectedTile));
-
-      this.setState({ selectedTile: null, selectedTileRotation: 0 });
+    if (plopper !== false) {
+      if (plopper.type === 'tile') {
+        this.plopTile(event.clientX, event.clientY);
+      }
+      this.setState({ plopper: false, plopperRotation: 0 });
     }
   }
 
   handleMouseDown = ({ clientX, clientY }) => {
-    this.setState({
-      isPanning: true,
-      panX: clientX,
-      panY: clientY,
-    });
+    this.setState({ isPanning: true });
   }
 
   handleMouseUp = () => {
-    this.setState({
-      isPanning: false,
-      panX: 0,
-      panY: 0,
-    });
+    this.setState({ isPanning: false });
   }
 
   handleMouseMove = ({ clientX, clientY }) => {
-    const { selectedTile } = this.props;
     const { isPanning } = this.state;
 
+    this.setState({mouseX: clientX, mouseY: clientY });
+
     if (isPanning) {
-      const deltaX = clientX - this.state.panX;
-      const deltaY = clientY - this.state.panY;
+      const deltaX = clientX - this.state.mouseX;
+      const deltaY = clientY - this.state.mouseY;
 
       this.setState(({ mapX, mapY }) => ({
         mapX: mapX + deltaX,
         mapY: mapY + deltaY,
-        panX: clientX,
-        panY: clientY,
       }));
-    }
-
-    if (selectedTile) {
-      const { x, y } = this.getAbsCoords(clientX, clientY);
-      this.setState({ selectedTileCoords: `${x}px, ${y}px` });
     }
   }
 
@@ -110,8 +102,8 @@ class Map extends Component {
     if (key === 'r') {
       event.preventDefault();
 
-      this.setState(({ selectedTileRotation }) => ({
-        selectedTileRotation: selectedTileRotation + 30,
+      this.setState(({ plopperRotation }) => ({
+        plopperRotation: plopperRotation + 30,
       }))
     } else if (key === 't') {
       event.preventDefault();
@@ -120,11 +112,30 @@ class Map extends Component {
       // const nextTile = tileData['a1a'];
       const nextTile = sample(Object.values(tileData));
       this.setState({
-        selectedTile: nextTile.name,
+        plopper: {
+          type: 'tile',
+          id: nextTile.name,
+        },
+        plopperCoords: this.plopperCoords,
+      });
+    } else if (key === 'm') {
+      event.preventDefault();
+      this.setState({
+        plopper: {
+          type: 'monster',
+          id: 'inox-guard-h',
+        },
+        plopperCoords: this.plopperCoords,
       });
     }
   }
 
+  plopTile(x, y) {
+    const { plopper, plopperRotation } = this.state;
+
+    this.scenario.current.placeTile(plopper.id, x, y, plopperRotation)
+      .then(() => this.scenario.current.connectPlacedTileIfPossible(plopper.id));
+  }
   getAbsCoords = (x, y) => {
     const { mapX, mapY, scale } = this.state;
 
@@ -139,10 +150,9 @@ class Map extends Component {
       mapX,
       mapY,
       scale,
+      plopper,
       scenario,
-      selectedTile,
-      selectedTileCoords,
-      selectedTileRotation,
+      plopperRotation,
     } = this.state;
 
     return (
@@ -153,24 +163,22 @@ class Map extends Component {
         onMouseMove={this.handleMouseMove}
         onClick={this.handleMapClick}
       >
-        {selectedTile && (
-          <div
-            className="selectedTile__wrapper"
-            style={{
-              transform: `translate(${selectedTileCoords}) rotate(${selectedTileRotation}deg)`,
-            }}
-          >
+        <div className="map" style={{
+          transform: `translate(${mapX}px, ${mapY}px) scale(${scale})`,
+        }}>
+          {plopper && (
             <div
-              className="selectedTile"
-              style={{
-                width: tileData[selectedTile].width,
-                height: tileData[selectedTile].height,
-                backgroundImage: `url(images/tiles/${selectedTile}.png)`,
-                transform: `scale(${scale}) translate(-50%, -50%)`,
-              }}
-            />
-          </div>
-        )}
+              className="plopper-wrapper"
+              style={{ transform: `translate(${this.plopperCoords}) rotate(${plopperRotation}deg)` }}
+            >
+              <img
+                className="plopper"
+                src={`images/${plopper.type}s/${plopper.id}.png`}
+                data-type={plopper.type}
+                alt=""
+              />
+            </div>
+          )}
           <Scenario
             ref={this.scenario}
             getAbsCoords={this.getAbsCoords}
