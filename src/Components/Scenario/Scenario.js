@@ -155,12 +155,19 @@ class Scenario extends PureComponent {
   }
 
   render() {
+    const { handleTileClick, scale } = this.props;
     const { tiles } = this.state;
 
     return (
       <div>
         {tiles.map(tile =>
-          <Tile ref={el => this.tileRefs[tile.name] = el} key={tile.name} {...tile} />
+          <Tile
+            {...tile}
+            handleTileClick={handleTileClick}
+            key={tile.name}
+            ref={el => this.tileRefs[tile.name] = el}
+            scale={scale}
+          />
         )}
       </div>
     );

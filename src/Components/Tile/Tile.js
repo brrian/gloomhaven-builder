@@ -1,4 +1,4 @@
-import React, { PureComponent } from 'react';
+import React, { createRef, PureComponent } from 'react';
 import tileData from '../../tileData.json';
 import './Tile.css';
 
@@ -13,28 +13,83 @@ class Tile extends PureComponent {
 
   anchors = {};
 
+  constructor(props) {
+    super(props);
+
+    this.origin = createRef();
+  }
+
   componentWillMount() {
-    this.setTokenOrientation();
+    this.setTileDimensions();
+  }
+
+  handleTileClick = ({ clientX, clientY }) => {
+    const { handleTileClick, name } = this.props;
+
+    const pos = this.getHexPosition(clientX, clientY);
+
+    handleTileClick(name, pos);
+  }
+
+  getHexPosition(mouseX, mouseY) {
+    const { scale, rotation } = this.props;
+    const {
+      height,
+      isHorizontal,
+      startHex,
+      tokenHeight,
+      tokenWidth,
+    } = this.state;
+
+    const rads = rotation * (Math.PI / 180);
+
+    const { x: originX, y: originY } = this.origin.current.getBoundingClientRect();
+
+    const x = ((mouseX - originX) / scale);
+    const y = -((mouseY - originY) / scale);
+
+    const left = (x * Math.cos(rads)) - (y * Math.sin(rads));
+    const bottom = (x * Math.sin(rads)) + (y * Math.cos(rads));
+
+    let initialRank = bottom - (height - startHex[1]);
+    let initialFile = left - startHex[0];
+
+    if (!isHorizontal && Math.round(initialRank / tokenHeight) % 2 === 1) {
+      initialFile -= tokenWidth / 2;
+    } else if (isHorizontal && Math.round(initialFile / tokenWidth) % 2 === 1) {
+      initialRank += tokenHeight / 2;
+    }
+
+    const rank = Math.round(initialRank / tokenHeight) + 1;
+    const file = Math.round(initialFile / tokenWidth) + 1;
+
+    return [rank, file];
   }
 
   getTokenPosition([ rank, file ]) {
-    const { height: tileHeight, startHex } = this.state;
+    const {
+      height: tileHeight,
+      isHorizontal,
+      startHex,
+      tokenHeight,
+      tokenWidth,
+    } = this.state;
 
-    const width = 194; // The distance between 2 files center points
-    const height = 168; // The distance between 2 ranks center points
     const offset = 100; // Half the dimensions of the HTML token element
 
-    let left = (startHex[0] - offset) + ((file - 1) * width);
-    let bottom = (tileHeight - startHex[1] - offset) + ((rank - 1) * height);
+    let left = (startHex[0] - offset) + ((file - 1) * tokenWidth);
+    let bottom = (tileHeight - startHex[1] - offset) + ((rank - 1) * tokenHeight);
 
-    if (rank % 2 === 0) {
-      left += width / 2;
+    if (!isHorizontal && rank % 2 === 0) {
+      left += tokenWidth / 2;
+    } else if (isHorizontal && file % 2 === 0) {
+      bottom -= tokenHeight / 2;
     }
 
     return { left, bottom };
   }
 
-  setTokenOrientation() {
+  setTileDimensions() {
     const { props: { rotation }, state: { isHorizontal } } = this;
 
     const shouldFlip = [30, 90, 150, 210, 270].includes(rotation);
@@ -44,11 +99,18 @@ class Tile extends PureComponent {
       orientation = orientation === 'h' ? 'v' : 'h';
     }
 
-    this.setState({ tokenOrientation: orientation });
+    this.setState({
+      tokenOrientation: orientation,
+      tokenWidth: !isHorizontal ? 194 : 168,
+      tokenHeight: !isHorizontal ? 168 : 200,
+      // tokenWidth: orientation === 'h' ? 194 : '168',
+      // tokenHeight: orientation === 'h' ? 168 : '194',
+    });
   }
 
   render() {
     const {
+      handleTileClick,
       monsters,
       name,
       rotation,
@@ -68,6 +130,7 @@ class Tile extends PureComponent {
       <div
         className="tile"
         data-tile={name}
+        onClick={this.handleTileClick}
         style={{
           top: y,
           left: x,
@@ -77,7 +140,7 @@ class Tile extends PureComponent {
           transform: `rotate(${rotation}deg)`
         }}
       >
-        <div className="origin" />
+        <div ref={this.origin} className="origin" />
         {anchors.map(([ left, top ], index) => (
           <div
             ref={el => this.anchors[index] = el}
