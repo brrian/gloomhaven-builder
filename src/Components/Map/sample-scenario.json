@@ -7,89 +7,95 @@
       "monsters":[
         {
           "name":"inox-guard",
-          "pos":[
-            1,
-            3
-          ],
-          "spawnAt":4
+          "pos":[ 1, 3 ],
+          "type": {
+            "2": "hidden",
+            "3": "hidden",
+            "4": "normal"
+          }
         },
         {
           "name":"inox-guard",
-          "pos":[
-            2,
-            3
-          ],
-          "spawnAt":3
+          "pos":[2, 3],
+          "type": {
+            "2": "hidden",
+            "3": "normal",
+            "4": "normal"
+          }
         },
         {
           "name":"inox-guard",
-          "pos":[
-            2,
-            4
-          ],
-          "spawnAt":3
+          "pos":[ 2, 4 ],
+          "type": {
+            "2": "hidden",
+            "3": "normal",
+            "4": "normal"
+          }
         },
         {
           "name":"inox-guard",
-          "pos":[
-            3,
-            5
-          ]
+          "pos":[ 3, 5 ],
+          "type": {
+            "2": "normal",
+            "3": "hidden",
+            "4": "hidden"
+          }
         },
         {
           "name":"inox-guard",
-          "pos":[
-            4,
-            4
-          ]
+          "pos":[ 4, 4 ],
+          "type": {
+            "2": "normal",
+            "3": "hidden",
+            "4": "hidden"
+          }
         },
         {
           "name":"inox-guard",
-          "pos":[
-            5,
-            5
-          ]
+          "pos":[ 5, 5 ],
+          "type": {
+            "2": "normal",
+            "3": "hidden",
+            "4": "hidden"
+          }
         },
         {
           "name":"inox-guard",
-          "pos":[
-            6,
-            3
-          ],
-          "spawnAt":3
+          "pos":[ 6, 3 ],
+          "type": {
+            "2": "hidden",
+            "3": "normal",
+            "4": "normal"
+          }
         },
         {
           "name":"inox-guard",
-          "pos":[
-            6,
-            4
-          ],
-          "spawnAt":3
+          "pos":[ 6, 4 ],
+          "type": {
+            "2": "hidden",
+            "3": "normal",
+            "4": "normal"
+          }
         },
         {
           "name":"inox-guard",
-          "pos":[
-            7,
-            3
-          ],
-          "spawnAt":4
+          "pos":[ 7, 3 ],
+          "type": {
+            "2": "hidden",
+            "3": "hidden",
+            "4": "normal"
+          }
         }
       ],
       "tokens":[
         {
           "name":"start-hex-h",
-          "pos":[
-            3,
-            1
-          ],
+          "pos":[ 3, 1 ],
           "rotation":90
         },
         {
           "name":"start-hex-h",
-          "pos":[
-            3,
-            2
-          ],
+          "pos":[ 3, 2 ],
           "rotation":90
         },
         {
@@ -273,11 +279,12 @@
       "monsters":[
         {
           "name":"inox-archer",
-          "pos":[
-            2,
-            2
-          ],
-          "spawnAt":4
+          "pos":[ 2, 2 ],
+          "type": {
+            "2": "hidden",
+            "3": "hidden",
+            "4": "normal"
+          }
         },
         {
           "name":"inox-guard",
@@ -285,7 +292,11 @@
             3,
             2
           ],
-          "eliteAt":3
+          "type": {
+            "2": "normal",
+            "3": "elite",
+            "4": "elite"
+          }
         }
       ],
       "tokens":[

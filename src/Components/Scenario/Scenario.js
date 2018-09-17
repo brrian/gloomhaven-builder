@@ -1,9 +1,9 @@
 import { chain, isEqual } from 'lodash';
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import tileData from '../../tileData.json';
 import Tile from '../Tile/Tile';
 
-class Scenario extends Component {
+class Scenario extends PureComponent {
   state = {
     availableConnections: [],
     tiles: [],
@@ -11,11 +11,17 @@ class Scenario extends Component {
 
   tileRefs = {};
 
+  constructor(props) {
+    super(props);
+
+    this.placeExistingMonstersAndTokens = this.placeExistingMonstersAndTokens.bind(this);
+  }
+
   componentDidMount() {
     const { connections } = this.props;
 
     if (connections.length) {
-      this.placeExistingTiles();
+      this.placeExistingTiles().then(this.placeExistingMonstersAndTokens);
     }
   }
 
@@ -25,7 +31,7 @@ class Scenario extends Component {
     const screenXMidpoint = window.innerWidth / 2;
     const screenYMidpoint = window.innerHeight / 2;
 
-    connections.reduce((promiseChain, connection) => {
+    return connections.reduce((promiseChain, connection) => {
       const { anchor, hook } = connection;
       const {
         [anchor.tile]: { rotation: anchorRotation },
@@ -41,6 +47,20 @@ class Scenario extends Component {
         return connectionPromise.then(result => [...chainResults, result]);
       });
     }, Promise.resolve([]));
+  }
+
+  placeExistingMonstersAndTokens() {
+    const { tiles } = this.props;
+
+    Object.values(tiles).forEach(({ name, monsters, tokens }) => {
+        const tiles = [...this.state.tiles];
+        const tile = tiles.find(item => item.name === name);
+
+        if (monsters && monsters.length) tile.monsters = monsters;
+        if (tokens && tokens.length) tile.tokens = tokens;
+
+        this.setState({ tiles });
+      });
   }
 
   placeTile(name, x, y, rotation) {
