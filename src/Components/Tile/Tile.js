@@ -93,8 +93,8 @@ class Tile extends PureComponent {
 
     this.setState({
       tokenOrientation: orientation,
-      tokenWidth: !isHorizontal ? 194 : 168,
-      tokenHeight: !isHorizontal ? 168 : 200,
+      tokenWidth: !isHorizontal ? 194  : 168,
+      tokenHeight: !isHorizontal ? 168 : 195,
     });
   }
 
