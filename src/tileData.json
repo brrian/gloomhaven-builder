@@ -509,6 +509,7 @@
     "name": "j1a",
     "width": 1463,
     "height": 1865,
+    "isHorizontal": true,
     "startHex": [225.317, 149.317],
     "anchors": [
       [394, 19],
@@ -524,6 +525,7 @@
     "name": "j1b",
     "width": 1463,
     "height": 1865,
+    "isHorizontal": true,
     "startHex": [901.317, 146.317],
     "anchors": [
       [1067.5, 19],
@@ -539,6 +541,7 @@
     "name": "j2a",
     "width": 1463,
     "height": 1865,
+    "isHorizontal": true,
     "startHex": [226.317, 147.317],
     "anchors": [
       [394.5, 19],
@@ -554,6 +557,7 @@
     "name": "j2b",
     "width": 1463,
     "height": 1865,
+    "isHorizontal": true,
     "startHex": [901.317, 146.317],
     "anchors": [
       [1067.5, 18.5],
