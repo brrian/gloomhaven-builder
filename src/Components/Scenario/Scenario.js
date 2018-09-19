@@ -77,10 +77,12 @@ class Scenario extends PureComponent {
       const { x: absX, y: absY } = getAbsCoords(x, y);
 
       const tile = Map({
+        monsters: Map(),
         name,
+        rotation: rotation % 360,
+        tokens: Map(),
         x: absX - (width / 2),
         y: absY - (height / 2),
-        rotation: rotation % 360,
       });
 
       const hooks = anchors.map((pos, index) => ({ tile: name, index }));
@@ -96,12 +98,27 @@ class Scenario extends PureComponent {
     const { hoveredTile } = this.props;
     const { tiles } = this.state;
 
-    const pos = this.tileRefs[hoveredTile].getHexPosition(x, y);
+    const pos = this.tileRefs[hoveredTile.name].getHexPosition(x, y);
 
-    const updatedTiles = tiles.setIn([hoveredTile, 'monsters', `${pos}`], {
-      name: name.replace('-h', ''),
+    const updatedTiles = tiles.setIn([hoveredTile.name, 'monsters', `${pos}`], {
+      name,
       pos,
       type: { 2: 'normal', 3: 'normal', 4: 'normal' },
+    });
+
+    return this.setState({ tiles: updatedTiles });
+  }
+
+  placeToken(name, x, y, rotation) {
+    const { hoveredTile } = this.props;
+    const { tiles } = this.state;
+
+    const pos = this.tileRefs[hoveredTile.name].getHexPosition(x, y);
+
+    const updatedTiles = tiles.setIn([hoveredTile.name, 'tokens', `${pos}`], {
+      name,
+      pos,
+      rotation,
     });
 
     return this.setState({ tiles: updatedTiles });
@@ -183,14 +200,15 @@ class Scenario extends PureComponent {
 
     return (
       <div>
-        {tiles.toArray().map(tile =>
+        {tiles.toArray().map((tile, index) =>
           <Tile
             {...tile.toJSON()}
-            key={tile.get('name')}
-            ref={el => this.tileRefs[tile.get('name')] = el}
-            scale={scale}
             handleTileMouseEnter={handleTileMouseEnter}
             handleTileMouseLeave={handleTileMouseLeave}
+            key={tile.get('name')}
+            order={index}
+            ref={el => this.tileRefs[tile.get('name')] = el}
+            scale={scale}
           />
         )}
       </div>

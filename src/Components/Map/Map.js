@@ -7,14 +7,13 @@ import Scenario from '../Scenario/Scenario';
 
 class Map extends PureComponent {
   state = {
-    hoveredTile: false,
+    hoveredTile: { name: false, orientation: 'h', rotation: 0 },
     mapX: 0,
     mapY: 0,
     plopper: false,
     plopperTileCoords: '0px, 0px',
     scale: .35,
     scenario: sampleScenario,
-    tokenOrientation: 'h',
   };
 
   constructor(props) {
@@ -24,11 +23,11 @@ class Map extends PureComponent {
   }
 
   get plopperSrc() {
-    const { plopper, tokenOrientation } = this.state;
+    const { hoveredTile: { orientation }, plopper } = this.state;
 
     if (plopper !== false) {
       const fileName = plopper.type === 'monster'
-        ? `${plopper.id}-${tokenOrientation}`
+        ? `${plopper.id}-${orientation}`
         : plopper.id;
 
       return `images/${plopper.type}s/${fileName}.png`;
@@ -54,19 +53,41 @@ class Map extends PureComponent {
       if (plopper.type === 'tile') {
         this.plopTile(clientX, clientY, plopper);
         this.setState({ plopper: false });
-      } else if (plopper.type === 'monster' && hoveredTile !== false) {
+      } else if (plopper.type === 'monster' && hoveredTile.name !== false) {
         this.plopMonster(clientX, clientY, plopper);
+        if (shiftKey !== true) this.setState({ plopper: false });
+      } else if (plopper.type === 'token' && hoveredTile.name !== false) {
+        this.plopToken(clientX, clientY, plopper);
         if (shiftKey !== true) this.setState({ plopper: false });
       }
     }
   }
 
-  handleTileMouseEnter = (tile, tokenOrientation) => {
-    this.setState({ hoveredTile: tile, tokenOrientation });
+  handleTileMouseEnter = (name, rotation, orientation) => {
+    this.setState(({ hoveredTile,  plopper: prevPlopper }) => {
+      const plopper = prevPlopper !== false ? { ...prevPlopper } : prevPlopper;
+
+      if (
+        plopper !== false &&
+        plopper.type === 'token' &&
+        hoveredTile.orientation !== orientation
+      ) {
+        // Do it like this to make the token switch back and forth.
+        // Otherwise  it will just keep incrementing.
+        plopper.rotation += orientation === 'h' ? 30 : -30;
+      }
+
+      return {
+        hoveredTile: { name, rotation, orientation },
+        plopper,
+      }
+    });
   }
 
   handleTileMouseLeave = () => {
-    this.setState({ hoveredTile: false });
+    this.setState(({ hoveredTile}) => ({
+      hoveredTile: { ...hoveredTile, name: false }
+    }));
   }
 
   handleMouseDown = () => {
@@ -99,12 +120,13 @@ class Map extends PureComponent {
     if (key === 'r') {
       event.preventDefault();
 
-      this.setState(({ plopper }) => ({
-        plopper: {
-          ...plopper,
-          rotation: plopper.rotation + 30,
+      this.setState(({ plopper }) => {
+        const rotation = plopper.type !== 'token' ? 30 : 60;
+
+        return {
+          plopper: { ...plopper, rotation: plopper.rotation + rotation }
         }
-      }));
+      });
     } else if (key === 't') {
       event.preventDefault();
 
@@ -129,6 +151,15 @@ class Map extends PureComponent {
         },
         plopperCoords: this.plopperCoords,
       });
+    } else if (key === 'k') {
+      event.preventDefault();
+      this.setState({
+        plopper: {
+          type: 'token',
+          id: 'corridor-earth-2h',
+          rotation: this.state.hoveredTile.rotation,
+        }
+      });
     }
   }
 
@@ -138,7 +169,12 @@ class Map extends PureComponent {
   }
 
   plopMonster(x, y, plopper) {
-    this.scenario.current.placeMonster(plopper.id, x, y, plopper.rotation);
+    this.scenario.current.placeMonster(plopper.id, x, y);
+  }
+
+  plopToken(x, y, plopper) {
+    const { hoveredTile: { rotation } } = this.state;
+    this.scenario.current.placeToken(plopper.id, x, y, plopper.rotation - rotation);
   }
 
   getAbsCoords = (x, y) => {

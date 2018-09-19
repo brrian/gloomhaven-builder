@@ -23,6 +23,8 @@
   position: absolute;
   z-index: 10;
   height: 200px;
+  margin-left: -100px;
+  margin-bottom: -100px;
   transform-origin: center;
 }
 
@@ -87,4 +89,11 @@
 
 .monster-type[data-party="3"] {
   transform: rotate(-120deg);
+}
+
+.token {
+  height: 225px;
+  margin-left: -99.5px;
+  margin-bottom: -114.5px;
+  transform-origin: 99.5px 114.5px;
 }

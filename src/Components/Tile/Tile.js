@@ -1,3 +1,4 @@
+import classNames from 'classnames';
 import React, { createRef, PureComponent } from 'react';
 import tileData from '../../tileData.json';
 import './Tile.css';
@@ -67,10 +68,8 @@ class Tile extends PureComponent {
       tokenWidth,
     } = this.state;
 
-    const offset = 100; // Half the dimensions of the HTML token element
-
-    let left = (startHex[0] - offset) + ((file - 1) * tokenWidth);
-    let bottom = (tileHeight - startHex[1] - offset) + ((rank - 1) * tokenHeight);
+    let left = startHex[0] + ((file - 1) * tokenWidth);
+    let bottom = tileHeight - startHex[1] + ((rank - 1) * tokenHeight);
 
     if (!isHorizontal && rank % 2 === 0) {
       left += tokenWidth / 2;
@@ -104,6 +103,7 @@ class Tile extends PureComponent {
       handleTileMouseLeave,
       monsters,
       name,
+      order,
       rotation,
       tokens,
       x,
@@ -121,15 +121,16 @@ class Tile extends PureComponent {
       <div
         className="tile"
         data-tile={name}
-        onMouseEnter={handleTileMouseEnter.bind(this, name, tokenOrientation)}
+        onMouseEnter={handleTileMouseEnter.bind(this, name, rotation, tokenOrientation)}
         onMouseLeave={handleTileMouseLeave.bind(this)}
         style={{
-          top: y,
-          left: x,
-          width,
-          height,
           backgroundImage: `url(images/tiles/${name}.png)`,
-          transform: `rotate(${rotation}deg)`
+          height,
+          left: x,
+          top: y,
+          transform: `rotate(${rotation}deg)`,
+          width,
+          zIndex: 1000 - order,
         }}
       >
         <div ref={this.origin} className="origin" />
@@ -161,6 +162,20 @@ class Tile extends PureComponent {
               />
             ))}
           </div>
+        ))}
+        {Object.values(tokens).map(({ name, pos, rotation: tokenRotation = 0 }) => (
+          <img
+            key={`${name}${pos}`}
+            src={`images/tokens/${name}.png`}
+            className={classNames(
+              'token',
+              { isThreeHex: /-3h$/.test(name) },
+            )}
+            style={{
+              ...this.getTokenPosition(pos),
+              transform: `rotate(${tokenRotation}deg)`,
+            }}
+          />
         ))}
     </div>
     );
