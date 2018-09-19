@@ -14,12 +14,27 @@ class Map extends PureComponent {
     plopperTileCoords: '0px, 0px',
     scale: .35,
     scenario: sampleScenario,
+    tokenOrientation: 'h',
   };
 
   constructor(props) {
     super(props);
 
     this.scenario = createRef();
+  }
+
+  get plopperSrc() {
+    const { plopper, tokenOrientation } = this.state;
+
+    if (plopper !== false) {
+      const fileName = plopper.type === 'monster'
+        ? `${plopper.id}-${tokenOrientation}`
+        : plopper.id;
+
+      return `images/${plopper.type}s/${fileName}.png`;
+    }
+
+    return false;
   }
 
   get plopperCoords() {
@@ -46,8 +61,8 @@ class Map extends PureComponent {
     }
   }
 
-  handleTileMouseEnter = (tile) => {
-    this.setState({ hoveredTile: tile });
+  handleTileMouseEnter = (tile, tokenOrientation) => {
+    this.setState({ hoveredTile: tile, tokenOrientation });
   }
 
   handleTileMouseLeave = () => {
@@ -109,7 +124,7 @@ class Map extends PureComponent {
       this.setState({
         plopper: {
           type: 'monster',
-          id: 'inox-guard-h',
+          id: 'inox-guard',
           rotation: 0,
         },
         plopperCoords: this.plopperCoords,
@@ -163,7 +178,7 @@ class Map extends PureComponent {
             >
               <img
                 className="plopper"
-                src={`images/${plopper.type}s/${plopper.id}.png`}
+                src={this.plopperSrc}
                 data-type={plopper.type}
                 alt=""
               />

@@ -121,7 +121,7 @@ class Tile extends PureComponent {
       <div
         className="tile"
         data-tile={name}
-        onMouseEnter={handleTileMouseEnter.bind(this, name)}
+        onMouseEnter={handleTileMouseEnter.bind(this, name, tokenOrientation)}
         onMouseLeave={handleTileMouseLeave.bind(this)}
         style={{
           top: y,
