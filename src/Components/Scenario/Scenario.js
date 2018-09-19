@@ -63,8 +63,7 @@ class Scenario extends PureComponent {
       });
     });
 
-        this.setState({ tiles });
-      });
+    this.setState({ tiles });
   }
 
   placeTile(name, x, y, rotation) {
@@ -91,6 +90,21 @@ class Scenario extends PureComponent {
         availableConnections: [ ...availableConnections, ...hooks ],
       }), resolve);
     });
+  }
+
+  placeMonster(name, x, y) {
+    const { hoveredTile } = this.props;
+    const { tiles } = this.state;
+
+    const pos = this.tileRefs[hoveredTile].getHexPosition(x, y);
+
+    const updatedTiles = tiles.setIn([hoveredTile, 'monsters', `${pos}`], {
+      name: name.replace('-h', ''),
+      pos,
+      type: { 2: 'normal', 3: 'normal', 4: 'normal' },
+    });
+
+    return this.setState({ tiles: updatedTiles });
   }
 
   connectTile({ anchor, hook }) {
@@ -160,7 +174,11 @@ class Scenario extends PureComponent {
   }
 
   render() {
-    const { handleTileClick, scale } = this.props;
+    const {
+      handleTileMouseEnter,
+      handleTileMouseLeave,
+      scale,
+    } = this.props;
     const { tiles } = this.state;
 
     return (
@@ -171,6 +189,8 @@ class Scenario extends PureComponent {
             key={tile.get('name')}
             ref={el => this.tileRefs[tile.get('name')] = el}
             scale={scale}
+            handleTileMouseEnter={handleTileMouseEnter}
+            handleTileMouseLeave={handleTileMouseLeave}
           />
         )}
       </div>

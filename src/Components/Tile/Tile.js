@@ -23,14 +23,6 @@ class Tile extends PureComponent {
     this.setTileDimensions();
   }
 
-  handleTileClick = ({ clientX, clientY }) => {
-    const { handleTileClick, name } = this.props;
-
-    const pos = this.getHexPosition(clientX, clientY);
-
-    handleTileClick(name, pos);
-  }
-
   getHexPosition(mouseX, mouseY) {
     const { scale, rotation } = this.props;
     const {
@@ -103,14 +95,13 @@ class Tile extends PureComponent {
       tokenOrientation: orientation,
       tokenWidth: !isHorizontal ? 194 : 168,
       tokenHeight: !isHorizontal ? 168 : 200,
-      // tokenWidth: orientation === 'h' ? 194 : '168',
-      // tokenHeight: orientation === 'h' ? 168 : '194',
     });
   }
 
   render() {
     const {
-      handleTileClick,
+      handleTileMouseEnter,
+      handleTileMouseLeave,
       monsters,
       name,
       rotation,
@@ -130,7 +121,8 @@ class Tile extends PureComponent {
       <div
         className="tile"
         data-tile={name}
-        onClick={this.handleTileClick}
+        onMouseEnter={handleTileMouseEnter.bind(this, name)}
+        onMouseLeave={handleTileMouseLeave.bind(this)}
         style={{
           top: y,
           left: x,

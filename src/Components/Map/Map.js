@@ -7,6 +7,7 @@ import Scenario from '../Scenario/Scenario';
 
 class Map extends PureComponent {
   state = {
+    hoveredTile: false,
     mapX: 0,
     mapY: 0,
     plopper: false,
@@ -31,23 +32,29 @@ class Map extends PureComponent {
     document.addEventListener('keydown', this.handleKeyDown);
   }
 
-  handleMapClick = (event) => {
-    const { plopper } = this.state;
+  handleMapClick = ({ clientX, clientY, shiftKey }) => {
+    const { hoveredTile, plopper } = this.state;
 
     if (plopper !== false) {
       if (plopper.type === 'tile') {
-        this.plopTile(event.clientX, event.clientY);
+        this.plopTile(clientX, clientY, plopper);
+        this.setState({ plopper: false });
+      } else if (plopper.type === 'monster' && hoveredTile !== false) {
+        this.plopMonster(clientX, clientY, plopper);
+        if (shiftKey !== true) this.setState({ plopper: false });
       }
-
-      this.setState({ plopper: false, plopperRotation: 0 });
     }
   }
 
-  handleTileClick = (tile, pos) => {
-    console.log('handle tile click', tile, pos);
+  handleTileMouseEnter = (tile) => {
+    this.setState({ hoveredTile: tile });
   }
 
-  handleMouseDown = ({ clientX, clientY }) => {
+  handleTileMouseLeave = () => {
+    this.setState({ hoveredTile: false });
+  }
+
+  handleMouseDown = () => {
     this.setState({ isPanning: true });
   }
 
@@ -114,6 +121,11 @@ class Map extends PureComponent {
     this.scenario.current.placeTile(plopper.id, x, y, plopper.rotation)
       .then(() => this.scenario.current.connectPlacedTileIfPossible(plopper.id));
   }
+
+  plopMonster(x, y, plopper) {
+    this.scenario.current.placeMonster(plopper.id, x, y, plopper.rotation);
+  }
+
   getAbsCoords = (x, y) => {
     const { mapX, mapY, scale } = this.state;
 
@@ -125,6 +137,7 @@ class Map extends PureComponent {
 
   render() {
     const {
+      hoveredTile,
       mapX,
       mapY,
       plopper,
@@ -159,7 +172,9 @@ class Map extends PureComponent {
           <Scenario
             {...scenario}
             getAbsCoords={this.getAbsCoords}
-            handleTileClick={this.handleTileClick}
+            handleTileMouseEnter={this.handleTileMouseEnter}
+            handleTileMouseLeave={this.handleTileMouseLeave}
+            hoveredTile={hoveredTile}
             ref={this.scenario}
             scale={scale}
           />
