@@ -1,12 +1,13 @@
-import { chain, isEqual } from 'lodash';
+import { chain, isEqual, keyBy } from 'lodash';
 import React, { PureComponent } from 'react';
 import tileData from '../../tileData.json';
 import Tile from '../Tile/Tile';
+import { Map, OrderedMap } from 'immutable';
 
 class Scenario extends PureComponent {
   state = {
     availableConnections: [],
-    tiles: [],
+    tiles: OrderedMap(),
   };
 
   tileRefs = {};
@@ -50,14 +51,17 @@ class Scenario extends PureComponent {
   }
 
   placeExistingMonstersAndTokens() {
-    const { tiles } = this.props;
+    const { tiles: propTiles } = this.props;
+    const { tiles: stateTiles } = this.state;
 
-    Object.values(tiles).forEach(({ name, monsters, tokens }) => {
-        const tiles = [...this.state.tiles];
-        const tile = tiles.find(item => item.name === name);
+    const tiles = stateTiles.withMutations(map => {
+      Object.values(propTiles).forEach(({ name, monsters, tokens }) => {
+        const monstersMap = Map(keyBy(monsters, 'pos'));
+        const tokensMap = Map(keyBy(tokens, 'pos'));
 
-        if (monsters && monsters.length) tile.monsters = monsters;
-        if (tokens && tokens.length) tile.tokens = tokens;
+        map.setIn([name, 'monsters'], monstersMap).setIn([name, 'tokens'], tokensMap);
+      });
+    });
 
         this.setState({ tiles });
       });
@@ -69,21 +73,21 @@ class Scenario extends PureComponent {
       const { tiles } = this.state;
       const { anchors, width, height } = tileData[name];
 
-      if (tiles.find(tile => tile.name === name)) return resolve();
+      if (tiles.has(name)) return resolve();
 
       const { x: absX, y: absY } = getAbsCoords(x, y);
 
-      const tile = {
+      const tile = Map({
         name,
         x: absX - (width / 2),
         y: absY - (height / 2),
         rotation: rotation % 360,
-      };
+      });
 
       const hooks = anchors.map((pos, index) => ({ tile: name, index }));
 
       this.setState(({ availableConnections, tiles: prevTiles }) => ({
-        tiles: [...tiles, tile],
+        tiles: prevTiles.set(name, tile),
         availableConnections: [ ...availableConnections, ...hooks ],
       }), resolve);
     });
@@ -100,16 +104,17 @@ class Scenario extends PureComponent {
       const { x: hookX, y: hookY } = hookEl.getBoundingClientRect();
 
       this.setState(({ availableConnections: prevConnections, tiles: prevTiles }) => {
-        const tiles = [ ...prevTiles ];
+        const newX = prevTiles.getIn([hook.tile, 'x']) + ((anchorX - hookX) / scale);
+        const newY = prevTiles.getIn([hook.tile, 'y']) + ((anchorY - hookY) / scale);
 
-        const updatedHook = tiles.find(({ name }) => name === hook.tile);
-        updatedHook.x += (anchorX - hookX) / scale;
-        updatedHook.y += (anchorY - hookY) / scale;
+        const tiles = prevTiles.withMutations(tiles => {
+          tiles.setIn([hook.tile, 'x'], newX).setIn([hook.tile, 'y'], newY);
+        });
 
         const availableConnections = prevConnections.filter(connection =>
           !(isEqual(connection, anchor) || isEqual(connection, hook)));
 
-        return { availableConnections, tiles }
+        return { availableConnections, tiles };
       }, resolve);
     });
   }
@@ -160,12 +165,11 @@ class Scenario extends PureComponent {
 
     return (
       <div>
-        {tiles.map(tile =>
+        {tiles.toArray().map(tile =>
           <Tile
-            {...tile}
-            handleTileClick={handleTileClick}
-            key={tile.name}
-            ref={el => this.tileRefs[tile.name] = el}
+            {...tile.toJSON()}
+            key={tile.get('name')}
+            ref={el => this.tileRefs[tile.get('name')] = el}
             scale={scale}
           />
         )}

@@ -150,7 +150,7 @@ class Tile extends PureComponent {
             style={{ top, left }}
           />
         ))}
-        {monsters.map(({ name, pos, type }) => (
+        {Object.values(monsters).map(({ name, pos, type }) => (
           <div
             key={pos}
             className="monster"
