@@ -10,10 +10,9 @@ class Map extends PureComponent {
     mapX: 0,
     mapY: 0,
     plopper: false,
+    plopperTileCoords: '0px, 0px',
     scale: .35,
     scenario: sampleScenario,
-    plopperTileCoords: '0px, 0px',
-    plopperRotation: 0,
   };
 
   constructor(props) {
@@ -78,9 +77,12 @@ class Map extends PureComponent {
     if (key === 'r') {
       event.preventDefault();
 
-      this.setState(({ plopperRotation }) => ({
-        plopperRotation: plopperRotation + 30,
-      }))
+      this.setState(({ plopper }) => ({
+        plopper: {
+          ...plopper,
+          rotation: plopper.rotation + 30,
+        }
+      }));
     } else if (key === 't') {
       event.preventDefault();
 
@@ -91,6 +93,7 @@ class Map extends PureComponent {
         plopper: {
           type: 'tile',
           id: nextTile.name,
+          rotation: 0,
         },
         plopperCoords: this.plopperCoords,
       });
@@ -100,16 +103,15 @@ class Map extends PureComponent {
         plopper: {
           type: 'monster',
           id: 'inox-guard-h',
+          rotation: 0,
         },
         plopperCoords: this.plopperCoords,
       });
     }
   }
 
-  plopTile(x, y) {
-    const { plopper, plopperRotation } = this.state;
-
-    this.scenario.current.placeTile(plopper.id, x, y, plopperRotation)
+  plopTile(x, y, plopper) {
+    this.scenario.current.placeTile(plopper.id, x, y, plopper.rotation)
       .then(() => this.scenario.current.connectPlacedTileIfPossible(plopper.id));
   }
   getAbsCoords = (x, y) => {
@@ -125,10 +127,9 @@ class Map extends PureComponent {
     const {
       mapX,
       mapY,
-      scale,
       plopper,
+      scale,
       scenario,
-      plopperRotation,
     } = this.state;
 
     return (
@@ -145,7 +146,7 @@ class Map extends PureComponent {
           {plopper && (
             <div
               className="plopper-wrapper"
-              style={{ transform: `translate(${this.plopperCoords}) rotate(${plopperRotation}deg)` }}
+              style={{ transform: `translate(${this.plopperCoords}) rotate(${plopper.rotation}deg)` }}
             >
               <img
                 className="plopper"
