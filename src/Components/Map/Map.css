@@ -8,6 +8,18 @@
   background: #ccc;
 }
 
+.map__wrapper.isAbleToPan {
+  cursor: grab;
+}
+
+.map__wrapper.isPanning {
+  cursor: grabbing;
+}
+
+.map__wrapper.isAbleToPan .map {
+  pointer-events: none;
+}
+
 .map {
   position: absolute;
 }

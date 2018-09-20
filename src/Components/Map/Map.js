@@ -1,13 +1,16 @@
+import classNames from 'classnames';
 import { sample } from 'lodash';
-import React, { PureComponent, createRef } from 'react';
+import React, { createRef, PureComponent } from 'react';
 import tileData from '../../tileData.json';
+import Scenario from '../Scenario/Scenario';
 import './Map.css';
 import sampleScenario from './sample-scenario.json';
-import Scenario from '../Scenario/Scenario';
 
 class Map extends PureComponent {
   state = {
     hoveredTile: { name: false, orientation: 'h', rotation: 0 },
+    isAbleToPan: false,
+    isPanning: false,
     mapX: 0,
     mapY: 0,
     plopper: false,
@@ -44,6 +47,12 @@ class Map extends PureComponent {
 
   componentDidMount() {
     document.addEventListener('keydown', this.handleKeyDown);
+    document.addEventListener('keyup', this.handleKeyUp);
+  }
+
+  componentWillUnmount() {
+    document.removeEventListener('keydown', this.handleKeyDown);
+    document.removeEventListener('keyup', this.handleKeyUp);
   }
 
   handleMapClick = ({ clientX, clientY, shiftKey }) => {
@@ -91,11 +100,19 @@ class Map extends PureComponent {
   }
 
   handleMouseDown = () => {
-    this.setState({ isPanning: true });
+    const { isAbleToPan } = this.state;
+
+    if (isAbleToPan) {
+      this.setState({ isPanning: true });
+    }
   }
 
   handleMouseUp = () => {
-    this.setState({ isPanning: false });
+    const { isPanning } = this.state;
+
+    if (isPanning) {
+      this.setState({ isPanning: false });
+    }
   }
 
   handleMouseMove = ({ clientX, clientY }) => {
@@ -117,7 +134,9 @@ class Map extends PureComponent {
   handleKeyDown = (event) => {
     const { key } = event;
 
-    if (key === 'r') {
+    if (key === ' ') {
+      this.setState({ isAbleToPan: true })
+    } else if (key === 'r') {
       event.preventDefault();
 
       this.setState(({ plopper }) => {
@@ -166,6 +185,14 @@ class Map extends PureComponent {
     }
   }
 
+  handleKeyUp = (event) => {
+    const { key } = event;
+
+    if (key === ' ') {
+      this.setState({ isAbleToPan: false, isPanning: false });
+    }
+  }
+
   plopTile(x, y, plopper) {
     this.scenario.current.placeTile(plopper.id, x, y, plopper.rotation)
       .then(() => this.scenario.current.connectPlacedTileIfPossible(plopper.id));
@@ -192,6 +219,8 @@ class Map extends PureComponent {
   render() {
     const {
       hoveredTile,
+      isAbleToPan,
+      isPanning,
       mapX,
       mapY,
       plopper,
@@ -201,7 +230,10 @@ class Map extends PureComponent {
 
     return (
       <div
-        className="map__wrapper"
+        className={classNames(
+          'map__wrapper',
+          { isAbleToPan, isPanning },
+        )}
         onMouseDown={this.handleMouseDown}
         onMouseUp={this.handleMouseUp}
         onMouseMove={this.handleMouseMove}
@@ -216,9 +248,10 @@ class Map extends PureComponent {
               style={{ transform: `translate(${this.plopperCoords}) rotate(${plopper.rotation}deg)` }}
             >
               <img
-                className="plopper"
+                className={classNames('plopper', plopper.type)}
                 src={this.plopperSrc}
                 data-type={plopper.type}
+                data-hexes={plopper.hexes}
                 alt=""
               />
             </div>
