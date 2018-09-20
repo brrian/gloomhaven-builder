@@ -1,7 +1,6 @@
 import classNames from 'classnames';
-import { sample } from 'lodash';
 import React, { createRef, PureComponent } from 'react';
-import tileData from '../../tileData.json';
+import Plopper from '../Plopper/Plopper';
 import Scenario from '../Scenario/Scenario';
 import './Map.css';
 import sampleScenario from './sample-scenario.json';
@@ -13,8 +12,6 @@ class Map extends PureComponent {
     isPanning: false,
     mapX: 0,
     mapY: 0,
-    plopper: false,
-    plopperTileCoords: '0px, 0px',
     scale: .35,
     scenario: sampleScenario,
   };
@@ -23,26 +20,6 @@ class Map extends PureComponent {
     super(props);
 
     this.scenario = createRef();
-  }
-
-  get plopperSrc() {
-    const { hoveredTile: { orientation }, plopper } = this.state;
-
-    if (plopper !== false) {
-      const fileName = plopper.type === 'monster'
-        ? `${plopper.id}-${orientation}`
-        : plopper.id;
-
-      return `images/${plopper.type}s/${fileName}.png`;
-    }
-
-    return false;
-  }
-
-  get plopperCoords() {
-    const { mouseX, mouseY } = this.state;
-    const { x, y } = this.getAbsCoords(mouseX, mouseY);
-    return `${x}px, ${y}px`;
   }
 
   componentDidMount() {
@@ -55,42 +32,8 @@ class Map extends PureComponent {
     document.removeEventListener('keyup', this.handleKeyUp);
   }
 
-  handleMapClick = ({ clientX, clientY, shiftKey }) => {
-    const { hoveredTile, plopper } = this.state;
-
-    if (plopper !== false) {
-      if (plopper.type === 'tile') {
-        this.plopTile(clientX, clientY, plopper);
-        this.setState({ plopper: false });
-      } else if (plopper.type === 'monster' && hoveredTile.name !== false) {
-        this.plopMonster(clientX, clientY, plopper);
-        if (shiftKey !== true) this.setState({ plopper: false });
-      } else if (plopper.type === 'token' && hoveredTile.name !== false) {
-        this.plopToken(clientX, clientY, plopper);
-        if (shiftKey !== true) this.setState({ plopper: false });
-      }
-    }
-  }
-
   handleTileMouseEnter = (name, rotation, orientation) => {
-    this.setState(({ hoveredTile,  plopper: prevPlopper }) => {
-      const plopper = prevPlopper !== false ? { ...prevPlopper } : prevPlopper;
-
-      if (
-        plopper !== false &&
-        plopper.type === 'token' &&
-        hoveredTile.orientation !== orientation
-      ) {
-        // Do it like this to make the token switch back and forth.
-        // Otherwise  it will just keep incrementing.
-        plopper.rotation += orientation === 'h' ? 30 : -30;
-      }
-
-      return {
-        hoveredTile: { name, rotation, orientation },
-        plopper,
-      }
-    });
+    this.setState({ hoveredTile: { name, rotation, orientation } });
   }
 
   handleTileMouseLeave = () => {
@@ -136,52 +79,6 @@ class Map extends PureComponent {
 
     if (key === ' ') {
       this.setState({ isAbleToPan: true })
-    } else if (key === 'r') {
-      event.preventDefault();
-
-      this.setState(({ plopper }) => {
-        const rotation = plopper.type !== 'token' ? 30 : 60;
-
-        return {
-          plopper: { ...plopper, rotation: plopper.rotation + rotation }
-        }
-      });
-    } else if (key === 't') {
-      event.preventDefault();
-
-      // TO DO: Replace this temp func.
-      // const nextTile = tileData['a1a'];
-      const nextTile = sample(Object.values(tileData));
-      this.setState({
-        plopper: {
-          type: 'tile',
-          id: nextTile.name,
-          rotation: 0,
-        },
-        plopperCoords: this.plopperCoords,
-      });
-    } else if (key === 'm') {
-      event.preventDefault();
-      this.setState({
-        plopper: {
-          type: 'monster',
-          id: 'inox-guard',
-          rotation: 0,
-        },
-        plopperCoords: this.plopperCoords,
-      });
-    } else if (key === 'k') {
-      event.preventDefault();
-      this.setState({
-        plopper: {
-          type: 'token',
-          id: 'thorns',
-          // id: 'corridor-earth-2h',
-          // id: 'wood-door-closed',
-          hexes: 1,
-          rotation: this.state.hoveredTile.rotation,
-        }
-      });
     }
   }
 
@@ -193,18 +90,17 @@ class Map extends PureComponent {
     }
   }
 
-  plopTile(x, y, plopper) {
-    this.scenario.current.placeTile(plopper.id, x, y, plopper.rotation)
-      .then(() => this.scenario.current.connectPlacedTileIfPossible(plopper.id));
-  }
+  handleItemPlopped = (id, type, x, y, rotation) => {
+    const scenario = this.scenario.current;
 
-  plopMonster(x, y, plopper) {
-    this.scenario.current.placeMonster(plopper.id, x, y);
-  }
-
-  plopToken(x, y, plopper) {
-    const { hoveredTile: { rotation } } = this.state;
-    this.scenario.current.placeToken(plopper.id, x, y, plopper.rotation - rotation);
+    if (type === 'tile') {
+      scenario.placeTile(id, x, y, rotation).then(() => scenario.connectPlacedTileIfPossible(id));
+    } else if (type === 'monster') {
+      scenario.placeMonster(id, x, y);
+    } else if (type === 'token') {
+      const { hoveredTile: { rotation: tileRotation } } = this.state;
+      scenario.placeToken(id, x, y, rotation - tileRotation);
+    }
   }
 
   getAbsCoords = (x, y) => {
@@ -223,7 +119,8 @@ class Map extends PureComponent {
       isPanning,
       mapX,
       mapY,
-      plopper,
+      mouseX,
+      mouseY,
       scale,
       scenario,
     } = this.state;
@@ -237,25 +134,18 @@ class Map extends PureComponent {
         onMouseDown={this.handleMouseDown}
         onMouseUp={this.handleMouseUp}
         onMouseMove={this.handleMouseMove}
-        onClick={this.handleMapClick}
       >
+        <Plopper
+          handleItemPlopped={this.handleItemPlopped}
+          hoveredTile={hoveredTile}
+          isAbleToPan={isAbleToPan}
+          scale={scale}
+          x={mouseX}
+          y={mouseY}
+        />
         <div className="map" style={{
           transform: `translate(${mapX}px, ${mapY}px) scale(${scale})`,
         }}>
-          {plopper && (
-            <div
-              className="plopper-wrapper"
-              style={{ transform: `translate(${this.plopperCoords}) rotate(${plopper.rotation}deg)` }}
-            >
-              <img
-                className={classNames('plopper', plopper.type)}
-                src={this.plopperSrc}
-                data-type={plopper.type}
-                data-hexes={plopper.hexes}
-                alt=""
-              />
-            </div>
-          )}
           <Scenario
             {...scenario}
             getAbsCoords={this.getAbsCoords}
