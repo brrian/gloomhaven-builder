@@ -156,7 +156,10 @@ class Map extends PureComponent {
       this.setState({
         plopper: {
           type: 'token',
-          id: 'corridor-earth-2h',
+          id: 'thorns',
+          // id: 'corridor-earth-2h',
+          // id: 'wood-door-closed',
+          hexes: 1,
           rotation: this.state.hoveredTile.rotation,
         }
       });

@@ -1,4 +1,3 @@
-import classNames from 'classnames';
 import React, { createRef, PureComponent } from 'react';
 import tileData from '../../tileData.json';
 import './Tile.css';
@@ -163,20 +162,23 @@ class Tile extends PureComponent {
             ))}
           </div>
         ))}
-        {Object.values(tokens).map(({ name, pos, rotation: tokenRotation = 0 }) => (
-          <img
-            key={`${name}${pos}`}
-            src={`images/tokens/${name}.png`}
-            className={classNames(
-              'token',
-              { isThreeHex: /-3h$/.test(name) },
-            )}
-            style={{
-              ...this.getTokenPosition(pos),
-              transform: `rotate(${tokenRotation}deg)`,
-            }}
-          />
-        ))}
+        {Object.values(tokens).map(({ name, pos, rotation: tokenRotation = 0 }) => {
+          const isMultiHex = /-(2|3)h$/.test(name);
+          const hexes = isMultiHex ? RegExp.$1 : 1;
+
+          return (
+            <img
+              className="token"
+              data-hexes={hexes}
+              key={`${name}${pos}`}
+              src={`images/tokens/${name}.png`}
+              style={{
+                ...this.getTokenPosition(pos),
+                transform: `rotate(${tokenRotation}deg)`,
+              }}
+            />
+          );
+        })}
     </div>
     );
   }

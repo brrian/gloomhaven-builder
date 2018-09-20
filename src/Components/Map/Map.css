@@ -22,12 +22,14 @@
 
 .plopper {
   transform: translate(-50%, -50%);
-  transform-origin: 0 0;
 }
 
-.plopper[data-type="monster"] {
-  width: 200px;
-  height: 200px;
+.plopper.monster, .plopper.token {
+  transform: translateY(-50%);
+}
+
+.plopper.token[data-hexes="3"] {
+  transform: translateY(-70%);
 }
 
 .dot {
