@@ -23,6 +23,12 @@ class Tile extends PureComponent {
     this.setTileDimensions();
   }
 
+  handleTileMouseLeave = ({ relatedTarget }) => {
+    if (relatedTarget.classList && relatedTarget.classList.contains('map__wrapper')) {
+      this.props.handleTileMouseLeave();
+    }
+  }
+
   getHexPosition(mouseX, mouseY) {
     const { scale, rotation } = this.props;
     const {
@@ -99,7 +105,6 @@ class Tile extends PureComponent {
   render() {
     const {
       handleTileMouseEnter,
-      handleTileMouseLeave,
       monsters,
       name,
       order,
@@ -121,7 +126,7 @@ class Tile extends PureComponent {
         className="tile"
         data-tile={name}
         onMouseEnter={handleTileMouseEnter.bind(this, name, rotation, tokenOrientation)}
-        onMouseLeave={handleTileMouseLeave.bind(this)}
+        onMouseLeave={this.handleTileMouseLeave}
         style={{
           backgroundImage: `url(images/tiles/${name}.png)`,
           height,

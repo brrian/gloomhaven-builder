@@ -23,30 +23,3 @@
 .map {
   position: absolute;
 }
-
-.plopper-wrapper {
-  position: absolute;
-  z-index: 5000;
-  opacity: .75;
-  transform-origin: 0 0;
-  pointer-events: none;
-}
-
-.plopper {
-  transform: translate(-50%, -50%);
-}
-
-.plopper.monster, .plopper.token {
-  transform: translateY(-50%);
-}
-
-.plopper.token[data-hexes="3"] {
-  transform: translateY(-70%);
-}
-
-.dot {
-  position: absolute;
-  width: 10px;
-  height: 10px;
-  background: red;
-}
