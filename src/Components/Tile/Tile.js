@@ -1,14 +1,9 @@
 import React, { createRef, PureComponent } from 'react';
-import tileData from '../../tileData.json';
 import './Tile.css';
 
 class Tile extends PureComponent {
   static defaultProps = {
     monsters: [],
-  };
-
-  state = {
-    ...tileData[this.props.name],
   };
 
   anchors = {};
@@ -30,14 +25,15 @@ class Tile extends PureComponent {
   }
 
   getHexPosition(mouseX, mouseY) {
-    const { scale, rotation } = this.props;
     const {
       height,
       isHorizontal,
+      rotation,
+      scale,
       startHex,
-      tokenHeight,
-      tokenWidth,
-    } = this.state;
+    } = this.props;
+
+    const { tokenHeight, tokenWidth } = this.state;
 
     const rads = rotation * (Math.PI / 180);
 
@@ -65,13 +61,8 @@ class Tile extends PureComponent {
   }
 
   getTokenPosition([ rank, file ]) {
-    const {
-      height: tileHeight,
-      isHorizontal,
-      startHex,
-      tokenHeight,
-      tokenWidth,
-    } = this.state;
+    const { height: tileHeight, isHorizontal, startHex } = this.props;
+    const { tokenHeight, tokenWidth } = this.state;
 
     let left = startHex[0] + ((file - 1) * tokenWidth);
     let bottom = tileHeight - startHex[1] + ((rank - 1) * tokenHeight);
@@ -86,7 +77,7 @@ class Tile extends PureComponent {
   }
 
   setTileDimensions() {
-    const { props: { rotation }, state: { isHorizontal } } = this;
+    const { isHorizontal, rotation } = this.props;
 
     const shouldFlip = [30, 90, 150, 210, 270].includes(rotation);
     let orientation = isHorizontal ? 'h' : 'v';
@@ -104,22 +95,20 @@ class Tile extends PureComponent {
 
   render() {
     const {
+      anchors,
       handleTileMouseEnter,
+      height,
       monsters,
       name,
       order,
       rotation,
       tokens,
+      width,
       x,
       y,
     } = this.props;
 
-    const {
-      anchors,
-      height,
-      tokenOrientation,
-      width,
-    } = this.state;
+    const { tokenOrientation } = this.state;
 
     return (
       <div
@@ -159,7 +148,7 @@ class Tile extends PureComponent {
             {[2, 3, 4].map(party => (
               <div
                 key={party}
-                className={`Monster--${tokenOrientation}`}
+                className={`Monster--${tokenOrientation.toUpperCase()}`}
                 data-party={party}
                 data-type={type[party]}
               />

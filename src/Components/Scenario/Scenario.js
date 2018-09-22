@@ -1,8 +1,8 @@
+import { Map, OrderedMap } from 'immutable';
 import { chain, isEqual, keyBy } from 'lodash';
 import React, { PureComponent } from 'react';
-import tileData from '../../tileData.json';
+import assetData from '../../assets.json';
 import Tile from '../Tile/Tile';
-import { Map, OrderedMap } from 'immutable';
 
 class Scenario extends PureComponent {
   state = {
@@ -39,10 +39,13 @@ class Scenario extends PureComponent {
         [hook.tile]: { rotation: hookRotation },
       } = tiles;
 
+      const anchorTile = assetData.tiles.find(({ id }) => id === anchor.tile);
+      const hookTile = assetData.tiles.find(({ id }) => id === hook.tile);
+
       return promiseChain.then((chainResults) => {
         const connectionPromise = Promise.all([
-          this.placeTile(anchor.tile, screenXMidpoint, screenYMidpoint, anchorRotation),
-          this.placeTile(hook.tile, screenXMidpoint, screenYMidpoint, hookRotation),
+          this.placeTile(anchorTile, screenXMidpoint, screenYMidpoint, anchorRotation),
+          this.placeTile(hookTile, screenXMidpoint, screenYMidpoint, hookRotation),
         ]).then(this.connectTile.bind(this, connection));
 
         return connectionPromise.then(result => [...chainResults, result]);
@@ -66,42 +69,43 @@ class Scenario extends PureComponent {
     this.setState({ tiles });
   }
 
-  placeTile(name, x, y, rotation) {
+  placeTile(item, x, y, rotation) {
     return new Promise((resolve, reject) => {
       const { getAbsCoords } = this.props;
       const { tiles } = this.state;
-      const { anchors, width, height } = tileData[name];
 
-      if (tiles.has(name)) return resolve();
+      const { anchors, id, width, height } = item;
+
+      if (tiles.has(id)) return resolve();
 
       const { x: absX, y: absY } = getAbsCoords(x, y);
 
       const tile = Map({
+        ...item,
         monsters: Map(),
-        name,
         rotation: rotation % 360,
         tokens: Map(),
         x: absX - (width / 2),
         y: absY - (height / 2),
       });
 
-      const hooks = anchors.map((pos, index) => ({ tile: name, index }));
+      const hooks = anchors.map((pos, index) => ({ tile: id, index }));
 
       this.setState(({ availableConnections, tiles: prevTiles }) => ({
-        tiles: prevTiles.set(name, tile),
+        tiles: prevTiles.set(id, tile),
         availableConnections: [ ...availableConnections, ...hooks ],
       }), resolve);
     });
   }
 
-  placeMonster(name, x, y) {
+  placeMonster({ id }, x, y) {
     const { hoveredTile } = this.props;
     const { tiles } = this.state;
 
     const pos = this.tileRefs[hoveredTile.name].getHexPosition(x, y);
 
     const updatedTiles = tiles.setIn([hoveredTile.name, 'monsters', `${pos}`], {
-      name,
+      name: id,
       pos,
       type: { 2: 'normal', 3: 'normal', 4: 'normal' },
     });
@@ -109,14 +113,14 @@ class Scenario extends PureComponent {
     return this.setState({ tiles: updatedTiles });
   }
 
-  placeToken(name, x, y, rotation) {
+  placeToken({ id }, x, y, rotation) {
     const { hoveredTile } = this.props;
     const { tiles } = this.state;
 
     const pos = this.tileRefs[hoveredTile.name].getHexPosition(x, y);
 
     const updatedTiles = tiles.setIn([hoveredTile.name, 'tokens', `${pos}`], {
-      name,
+      name: id,
       pos,
       rotation,
     });

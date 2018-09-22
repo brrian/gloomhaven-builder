@@ -1,0 +1,991 @@
+{
+  "tiles": [
+    {
+      "id": "a1a",
+      "name": "a1a",
+      "width": 1015,
+      "height": 544,
+      "startHex": [99.5, 332.5],
+      "anchors": [[39, 168.5], [295.5, 37.5], [1014, 168.5], [782.5, 543]]
+    },
+    {
+      "id": "a1b",
+      "name": "a1b",
+      "width": 1015,
+      "height": 545,
+      "startHex": [135.5, 336.5],
+      "anchors": [[232, 542.5], [1.5, 168], [719.5, 38], [976, 168]]
+    },
+    {
+      "id": "a2a",
+      "name": "a2a",
+      "width": 1088,
+      "height": 618,
+      "startHex": [153.5, 386.5],
+      "anchors": [[93, 223.5], [349.5, 92.5], [1067.5, 223], [836.5, 597.5]]
+    },
+    {
+      "id": "a2b",
+      "name": "a2b",
+      "width": 1088,
+      "height": 618,
+      "startHex": [154.5, 388.5],
+      "anchors": [
+        [250.5, 597.5],
+        [19.5, 223.5],
+        [737.5, 92.25],
+        [993.5, 223.25]
+      ]
+    },
+    {
+      "id": "a3a",
+      "name": "a3a",
+      "width": 1088,
+      "height": 618,
+      "startHex": [153.5, 388.5],
+      "anchors": [[93, 223.5], [349.5, 92.5], [1067.5, 223], [836.5, 597.5]]
+    },
+    {
+      "id": "a3b",
+      "name": "a3b",
+      "width": 1088,
+      "height": 618,
+      "startHex": [154.5, 387.5],
+      "anchors": [[250.5, 597.5], [19.5, 223.5], [737.5, 92.5], [994, 223.5]]
+    },
+    {
+      "id": "a4a",
+      "name": "a4a",
+      "width": 1088,
+      "height": 618,
+      "startHex": [153.5, 387.5],
+      "anchors": [[93, 223.5], [349.5, 92.5], [1067.5, 223], [837, 597.5]]
+    },
+    {
+      "id": "a4b",
+      "name": "a4b",
+      "width": 1088,
+      "height": 618,
+      "startHex": [153.5, 387.5],
+      "anchors": [[250.5, 597.5], [19.5, 223], [737.5, 92.5], [994, 223]]
+    },
+    {
+      "id": "b1a",
+      "name": "b1a",
+      "width": 889,
+      "height": 956,
+      "startHex": [250.5, 725.5],
+      "anchors": [[345.5, 936], [93, 392.5], [443.5, 92.5], [869.5, 392.5]]
+    },
+    {
+      "id": "b1b",
+      "name": "b1b",
+      "width": 889,
+      "height": 956,
+      "startHex": [247.5, 728.5],
+      "anchors": [[542.5, 936], [18.5, 392], [444, 92.5], [795, 392.5]]
+    },
+    {
+      "id": "b2a",
+      "name": "b2a",
+      "width": 889,
+      "height": 956,
+      "startHex": [247.5, 725.5],
+      "anchors": [[345.5, 936], [93, 392.5], [443.5, 92.5], [869.5, 392]]
+    },
+    {
+      "id": "b2b",
+      "name": "b2b",
+      "width": 889,
+      "height": 956,
+      "startHex": [249.5, 726.5],
+      "anchors": [[542, 936], [18.5, 392.5], [444, 92.5], [795, 392.5]]
+    },
+    {
+      "id": "b3a",
+      "name": "b3a",
+      "width": 889,
+      "height": 956,
+      "startHex": [247.5, 725.5],
+      "anchors": [[345.5, 936], [93, 392.5], [444, 92], [870, 392]]
+    },
+    {
+      "id": "b3b",
+      "name": "b3b",
+      "width": 889,
+      "height": 956,
+      "startHex": [249.5, 726.5],
+      "anchors": [[542, 936], [18.5, 392.5], [444.5, 92.5], [795, 392.5]]
+    },
+    {
+      "id": "b4a",
+      "name": "b4a",
+      "width": 889,
+      "height": 956,
+      "startHex": [247.5, 724.5],
+      "anchors": [[345.5, 936], [93, 392.5], [443.5, 93], [870, 392.5]]
+    },
+    {
+      "id": "b4b",
+      "name": "b4b",
+      "width": 889,
+      "height": 956,
+      "startHex": [249.5, 727.5],
+      "anchors": [[542.5, 935.5], [18.5, 392.5], [444, 92.5], [795, 392.5]]
+    },
+    {
+      "id": "c1a",
+      "name": "c1a",
+      "width": 1087,
+      "height": 956,
+      "startHex": [349.5, 726.5],
+      "anchors": [
+        [642.5, 862],
+        [220.75, 206.567],
+        [544.5, 19],
+        [900.75, 412.067]
+      ]
+    },
+    {
+      "id": "c1b",
+      "name": "c1b",
+      "width": 1087,
+      "height": 956,
+      "startHex": [348.48, 725.341],
+      "anchors": [
+        [443, 861],
+        [184.384, 412.067],
+        [541.5, 18.5],
+        [864.884, 206.567]
+      ]
+    },
+    {
+      "id": "c2a",
+      "name": "c2a",
+      "width": 1087,
+      "height": 956,
+      "startHex": [347.486, 728.395],
+      "anchors": [
+        [642.5, 861],
+        [220.75, 206.567],
+        [544.5, 18.5],
+        [900.75, 412.067]
+      ]
+    },
+    {
+      "id": "c2b",
+      "name": "c2b",
+      "width": 1087,
+      "height": 956,
+      "startHex": [347.486, 726.392],
+      "anchors": [
+        [443.5, 862],
+        [184.884, 412.067],
+        [541.5, 18],
+        [865.384, 205.567]
+      ]
+    },
+    {
+      "id": "d1a",
+      "name": "d1a",
+      "width": 1280,
+      "height": 1125,
+      "startHex": [441.477, 894.489],
+      "anchors": [
+        [736.5, 1105],
+        [282.384, 881.567],
+        [218.75, 206.567],
+        [1092.75, 411.067]
+      ]
+    },
+    {
+      "id": "d1b",
+      "name": "d1b",
+      "width": 1280,
+      "height": 1125,
+      "startHex": [441.477, 900.937],
+      "anchors": [
+        [542, 1105],
+        [184.884, 411.067],
+        [1059.884, 205.567],
+        [995.75, 881.567]
+      ]
+    },
+    {
+      "id": "d2a",
+      "name": "d2a",
+      "width": 1280,
+      "height": 1125,
+      "startHex": [442.841, 893.75],
+      "anchors": [
+        [736.5, 1105],
+        [282.384, 881.567],
+        [218.75, 205.567],
+        [1092.75, 411.067]
+      ]
+    },
+    {
+      "id": "d2b",
+      "name": "d2b",
+      "width": 1280,
+      "height": 1125,
+      "startHex": [445.852, 896.477],
+      "anchors": [
+        [542, 1105.5],
+        [184.884, 411.067],
+        [1059.884, 205.567],
+        [995.75, 882.067]
+      ]
+    },
+    {
+      "id": "e1a",
+      "name": "e1a",
+      "width": 1084,
+      "height": 1124,
+      "startHex": [249.489, 895.668],
+      "anchors": [[346, 1030.5], [344.5, 92.5], [1063.5, 560.5]]
+    },
+    {
+      "id": "e1b",
+      "name": "e1b",
+      "width": 1084,
+      "height": 1124,
+      "startHex": [248.48, 893.665],
+      "anchors": [[346.5, 1031], [344.5, 93], [1063.5, 561]]
+    },
+    {
+      "id": "f1a",
+      "name": "f1a",
+      "width": 697,
+      "height": 1797,
+      "startHex": [152.5, 1569.5],
+      "anchors": [[445, 1704], [18, 1404.5], [18, 392.5], [444, 92.5]]
+    },
+    {
+      "id": "f1b",
+      "name": "f1b",
+      "width": 697,
+      "height": 1797,
+      "startHex": [155.5, 1571.5],
+      "anchors": [[445, 1703], [18, 1405], [18, 392], [444.5, 93]]
+    },
+    {
+      "id": "g1a",
+      "name": "g1a",
+      "width": 1670,
+      "height": 787,
+      "startHex": [151.5, 559.5],
+      "anchors": [
+        [251.5, 692],
+        [19, 391.5],
+        [834.5, 18],
+        [1576, 392.5],
+        [1420.5, 692]
+      ]
+    },
+    {
+      "id": "g1b",
+      "name": "g1b",
+      "width": 1670,
+      "height": 787,
+      "startHex": [153.5, 557.5],
+      "anchors": [
+        [248.5, 693],
+        [93, 392.5],
+        [834.5, 18],
+        [1650, 392],
+        [1417.5, 693]
+      ]
+    },
+    {
+      "id": "g2a",
+      "name": "g2a",
+      "width": 1670,
+      "height": 787,
+      "startHex": [151.5, 557.5],
+      "anchors": [
+        [251.5, 692.5],
+        [19, 392.5],
+        [834.5, 19],
+        [1576, 392.5],
+        [1420, 692.5]
+      ]
+    },
+    {
+      "id": "g2b",
+      "name": "g2b",
+      "width": 1670,
+      "height": 787,
+      "startHex": [152.5, 556.5],
+      "anchors": [
+        [248.5, 692],
+        [93, 392.5],
+        [834, 19],
+        [1650, 392.5],
+        [1417.5, 692]
+      ]
+    },
+    {
+      "id": "h1a",
+      "name": "h1a",
+      "width": 1469,
+      "height": 1453,
+      "startHex": [632.5, 1226.5],
+      "anchors": [[733.5, 1359], [89, 218.5], [734, 18], [1454, 218.5]]
+    },
+    {
+      "id": "h1b",
+      "name": "h1b",
+      "width": 1469,
+      "height": 1453,
+      "startHex": [639.5, 1230.5],
+      "anchors": [[734, 1359], [14.5, 218.5], [733.5, 17.5], [1378, 218.5]]
+    },
+    {
+      "id": "h2a",
+      "name": "h2a",
+      "width": 1469,
+      "height": 1453,
+      "startHex": [642.5, 1225.5],
+      "anchors": [[734, 1359], [89, 218.5], [733.5, 19], [1453, 219]]
+    },
+    {
+      "id": "h2b",
+      "name": "h2b",
+      "width": 1469,
+      "height": 1453,
+      "startHex": [637.5, 1229.5],
+      "anchors": [[734.5, 1359], [14.5, 218.5], [733.5, 18], [1378, 219.5]]
+    },
+    {
+      "id": "h3a",
+      "name": "h3a",
+      "width": 1469,
+      "height": 1453,
+      "startHex": [636.5, 1232.5],
+      "anchors": [[733.5, 1358.5], [90, 218], [733.5, 18], [1453.5, 218.5]]
+    },
+    {
+      "id": "h3b",
+      "name": "h3b",
+      "width": 1469,
+      "height": 1453,
+      "startHex": [636.5, 1227.5],
+      "anchors": [[733.5, 1359], [15, 218.5], [734.5, 18.5], [1378.5, 218.5]]
+    },
+    {
+      "id": "i1a",
+      "name": "i1a",
+      "width": 1281,
+      "height": 1124,
+      "startHex": [150.5, 897.5],
+      "anchors": [[640, 1105], [92.5, 391.5], [640, 93], [1261.5, 391.5]]
+    },
+    {
+      "id": "i1b",
+      "name": "i1b",
+      "width": 1281,
+      "height": 1124,
+      "startHex": [153.5, 896.5],
+      "anchors": [[647.5, 1099.5], [26, 385.5], [647.5, 88], [1195, 386.5]]
+    },
+    {
+      "id": "i2a",
+      "name": "i2a",
+      "width": 1281,
+      "height": 1124,
+      "startHex": [149.5, 896.5],
+      "anchors": [[640, 1105], [93.5, 391.5], [640.5, 93.5], [1262, 391.5]]
+    },
+    {
+      "id": "i2b",
+      "name": "i2b",
+      "width": 1281,
+      "height": 1124,
+      "startHex": [152.5, 896.5],
+      "anchors": [[639.5, 1106], [18.5, 391.5], [639.5, 93.5], [1187, 392]]
+    },
+    {
+      "id": "j1a",
+      "name": "j1a",
+      "width": 1463,
+      "height": 1865,
+      "isHorizontal": true,
+      "startHex": [225.317, 149.317],
+      "anchors": [
+        [394, 19],
+        [693, 250.5],
+        [1218.567, 1158.884],
+        [1205.75, 1495.567],
+        [712.067, 1642.884],
+        [257.384, 1106.567],
+        [20, 444.5]
+      ]
+    },
+    {
+      "id": "j1b",
+      "name": "j1b",
+      "width": 1463,
+      "height": 1865,
+      "isHorizontal": true,
+      "startHex": [901.317, 146.317],
+      "anchors": [
+        [1067.5, 19],
+        [1443, 444.5],
+        [1205.75, 1106.567],
+        [749.067, 1643.884],
+        [254.884, 1496.567],
+        [242.067, 1158.884],
+        [769, 250.5]
+      ]
+    },
+    {
+      "id": "j2a",
+      "name": "j2a",
+      "width": 1463,
+      "height": 1865,
+      "isHorizontal": true,
+      "startHex": [226.317, 147.317],
+      "anchors": [
+        [394.5, 19],
+        [693, 250.5],
+        [1218.567, 1158.884],
+        [1205.75, 1496.567],
+        [712.567, 1643.884],
+        [257.884, 1106.567],
+        [19, 444.5]
+      ]
+    },
+    {
+      "id": "j2b",
+      "name": "j2b",
+      "width": 1463,
+      "height": 1865,
+      "isHorizontal": true,
+      "startHex": [901.317, 146.317],
+      "anchors": [
+        [1067.5, 18.5],
+        [1442, 444],
+        [1203.75, 1107.067],
+        [749.067, 1643.884],
+        [255.884, 1496.567],
+        [243.067, 1158.884],
+        [768.5, 250]
+      ]
+    },
+    {
+      "id": "k1a",
+      "name": "k1a",
+      "width": 1883,
+      "height": 1293,
+      "startHex": [355.5, 1065.5],
+      "anchors": [
+        [452.5, 1198],
+        [129.75, 1085.067],
+        [940.5, 92.5],
+        [1685.75, 1048.567],
+        [1426, 1198]
+      ]
+    },
+    {
+      "id": "k1b",
+      "name": "k1b",
+      "width": 1883,
+      "height": 1293,
+      "startHex": [359.5, 1063.5],
+      "anchors": [
+        [455.5, 1198],
+        [195.884, 1048.567],
+        [941.5, 93],
+        [1751.884, 1085.067],
+        [1429.5, 1198]
+      ]
+    },
+    {
+      "id": "k2a",
+      "name": "k2a",
+      "width": 1883,
+      "height": 1293,
+      "startHex": [358.5, 1061.5],
+      "anchors": [
+        [452.5, 1198],
+        [129.75, 1085.067],
+        [940, 92.5],
+        [1685.75, 1048.567],
+        [1426.5, 1198]
+      ]
+    },
+    {
+      "id": "k2b",
+      "name": "k2b",
+      "width": 1883,
+      "height": 1293,
+      "startHex": [354.5, 1066.5],
+      "anchors": [
+        [455.5, 1198],
+        [195.884, 1048.567],
+        [941.5, 92.5],
+        [1751.884, 1085.067],
+        [1429.5, 1198]
+      ]
+    },
+    {
+      "id": "l1a",
+      "name": "l1a",
+      "width": 1087,
+      "height": 1461,
+      "startHex": [152.5, 1230.5],
+      "anchors": [[639.5, 1439.5], [20.5, 728.5], [639, 19], [993, 728.5]]
+    },
+    {
+      "id": "l1b",
+      "name": "l1b",
+      "width": 1087,
+      "height": 1461,
+      "startHex": [154.5, 1232.5],
+      "anchors": [[639.5, 1439], [20, 728.5], [639, 18], [993, 729]]
+    },
+    {
+      "id": "l2a",
+      "name": "l2a",
+      "width": 1087,
+      "height": 1461,
+      "startHex": [151.5, 1229.5],
+      "anchors": [[640, 1439], [20.5, 729.5], [639.5, 18.5], [992.5, 729]]
+    },
+    {
+      "id": "l2b",
+      "name": "l2b",
+      "width": 1087,
+      "height": 1461,
+      "startHex": [153.5, 1232.5],
+      "anchors": [[639.5, 1439], [18, 728.5], [639.5, 18.5], [993, 728.5]]
+    },
+    {
+      "id": "l3a",
+      "name": "l3a",
+      "width": 1087,
+      "height": 1461,
+      "startHex": [156.5, 1232.5],
+      "anchors": [[639, 1439], [19, 727.5], [639.5, 19], [993, 729]]
+    },
+    {
+      "id": "l3b",
+      "name": "l3b",
+      "width": 1087,
+      "height": 1461,
+      "startHex": [153.5, 1231.5],
+      "anchors": [[639.5, 1439], [21, 729.5], [639.5, 19], [993, 729.5]]
+    },
+    {
+      "id": "m1a",
+      "name": "m1a",
+      "width": 1278,
+      "height": 1460,
+      "startHex": [343.5, 1229.5],
+      "anchors": [
+        [638.5, 1441],
+        [119.75, 1254.067],
+        [93, 729],
+        [119.25, 205.567],
+        [638, 18.5],
+        [1156.884, 206.567],
+        [1183.5, 729.5],
+        [1156.884, 1254.067]
+      ]
+    },
+    {
+      "id": "m1b",
+      "name": "m1b",
+      "width": 1278,
+      "height": 1460,
+      "startHex": [347.5, 1231.5],
+      "anchors": [
+        [638.5, 1441],
+        [118.75, 1254.067],
+        [93, 729],
+        [119.25, 205.567],
+        [638.5, 19],
+        [1156.884, 205.067],
+        [1183.5, 729.5],
+        [1156.884, 1254.567]
+      ]
+    },
+    {
+      "id": "n1a",
+      "name": "n1a",
+      "width": 1668,
+      "height": 1460,
+      "startHex": [153.5, 1232.5],
+      "anchors": [
+        [443, 1441],
+        [18.5, 729.5],
+        [834, 93],
+        [1574, 729.5],
+        [1224.5, 1441]
+      ]
+    },
+    {
+      "id": "n1b",
+      "name": "n1b",
+      "width": 1668,
+      "height": 1460,
+      "startHex": [154.5, 1230.5],
+      "anchors": [
+        [442.5, 1441],
+        [92.5, 730],
+        [832.5, 94],
+        [1648, 729.5],
+        [1223.5, 1441]
+      ]
+    }
+  ],
+  "monsters": [
+    {
+      "id": "ancient-artillery",
+      "name": "Ancient Artillery"
+    },
+    {
+      "id": "bandit-archer",
+      "name": "Bandit Archer"
+    },
+    {
+      "id": "bandit-guard",
+      "name": "Bandit Guard"
+    },
+    {
+      "id": "black-imp",
+      "name": "Black Imp"
+    },
+    {
+      "id": "cave-bear",
+      "name": "Cave Bear"
+    },
+    {
+      "id": "city-archer",
+      "name": "City Archer"
+    },
+    {
+      "id": "city-guard",
+      "name": "City Guard"
+    },
+    {
+      "id": "cultist",
+      "name": "Cultist"
+    },
+    {
+      "id": "deep-terror",
+      "name": "Deep Terror"
+    },
+    {
+      "id": "earth-demon",
+      "name": "Earth Demon"
+    },
+    {
+      "id": "flame-demon",
+      "name": "Flame Demon"
+    },
+    {
+      "id": "forest-imp",
+      "name": "Forest Imp"
+    },
+    {
+      "id": "frost-demon",
+      "name": "Frost Demon"
+    },
+    {
+      "id": "giant-viper",
+      "name": "Giant Viper"
+    },
+    {
+      "id": "harrower-infester",
+      "name": "Harrower Infester"
+    },
+    {
+      "id": "hound",
+      "name": "Hound"
+    },
+    {
+      "id": "inox-archer",
+      "name": "Inox Archer"
+    },
+    {
+      "id": "inox-bodyguard",
+      "name": "Inox Bodyguard"
+    },
+    {
+      "id": "inox-guard",
+      "name": "Inox Guard"
+    },
+    {
+      "id": "inox-shaman",
+      "name": "Inox Shaman"
+    },
+    {
+      "id": "stone-golem",
+      "name": "Stone Golem"
+    },
+    {
+      "id": "sun-demon",
+      "name": "Sun Demon"
+    },
+    {
+      "id": "vermling-scout",
+      "name": "Vermling Scout"
+    },
+    {
+      "id": "vermling-shaman",
+      "name": "Vermling Shaman"
+    },
+    {
+      "id": "wind-demon",
+      "name": "Wind Demon"
+    }
+  ],
+  "tokens": [
+    {
+      "id": "altar",
+      "name": "Altar"
+    },
+    {
+      "id": "altar-h",
+      "name": "Altar (Horizontal)",
+      "isHorizontal": true
+    },
+    {
+      "id": "barrel",
+      "name": "Barrel"
+    },
+    {
+      "id": "bear-trap",
+      "name": "Bear Trap"
+    },
+    {
+      "id": "bookcase-2h",
+      "name": "Bookcase (2 hexes)",
+      "hexes": 2
+    },
+    {
+      "id": "boulder-2h",
+      "name": "Boulder (2 hexes)",
+      "hexes": 2
+    },
+    {
+      "id": "bush",
+      "name": "Bush"
+    },
+    {
+      "id": "cabinet",
+      "name": "Cabinet"
+    },
+    {
+      "id": "coin",
+      "name": "Coin"
+    },
+    {
+      "id": "corridor-earth-2h",
+      "name": "Corridor Earth (2 hexes)",
+      "hexes": 2
+    },
+    {
+       "id": "corridor-nat-stone-2h",
+      "name": "Corridor Nat Stone (2 hexes)",
+      "hexes": 2
+    },
+    {
+      "id": "corridor-stone-2h",
+      "name": "Corridor Stone (2 hexes)",
+      "hexes": 2
+    },
+    {
+      "id": "corridor-wood-2h",
+      "name": "Corridor Wood (2 hexes)",
+      "hexes": 2
+    },
+    {
+      "id": "crate",
+      "name": "Crate"
+    },
+    {
+      "id": "crystal",
+      "name": "Crystal"
+    },
+    {
+      "id": "dark-fog",
+      "name": "Dark Fog"
+    },
+    {
+      "id": "dark-pit-2h",
+      "name": "Dark Pit (2 hexes)",
+      "hexes": 2
+    },
+    {
+      "id": "fountain",
+      "name": "Fountain"
+    },
+    {
+      "id": "hot-coals",
+      "name": "Hot Coals"
+    },
+    {
+      "id": "light-fog",
+      "name": "Light Fog"
+    },
+    {
+      "id": "log-2h",
+      "name": "Log (2 hexes)",
+      "hexes": 2
+    },
+    {
+      "id": "nest",
+      "name": "Nest"
+    },
+    {
+      "id": "poison-gas",
+      "name": "Poison Gas"
+    },
+    {
+      "id": "pressure-plate",
+      "name": "Pressure Plate"
+    },
+    {
+      "id": "rock-column",
+      "name": "Rock Column"
+    },
+    {
+      "id": "rubble",
+      "name": "Rubble"
+    },
+    {
+      "id": "sarcophagus-2h",
+      "name": "Sarcophagus (2 hexes)",
+      "hexes": 2
+    },
+    {
+      "id": "scenario-1",
+      "name": "Scenario 1",
+      "canOverlay": true
+    },
+    {
+      "id": "scenario-2",
+      "name": "Scenario 2"
+    },
+    {
+      "id": "scenario-3",
+      "name": "Scenario 3"
+    },
+    {
+      "id": "scenario-4",
+      "name": "Scenario 4"
+    },
+    {
+      "id": "scenario-5",
+      "name": "Scenario 5"
+    },
+    {
+      "id": "scenario-a",
+      "name": "Scenario A"
+    },
+    {
+      "id": "scenario-b",
+      "name": "Scenario B"
+    },
+    {
+      "id": "scenario-c",
+      "name": "Scenario C"
+    },
+    {
+      "id": "scenario-d",
+      "name": "Scenario D"
+    },
+    {
+      "id": "scenario-e",
+      "name": "Scenario E"
+    },
+    {
+      "id": "shelf-2h",
+      "name": "Shelf (2 hexes)",
+      "hexes": 2
+    },
+    {
+      "id": "spike-trap",
+      "name": "Spike Trap"
+    },
+    {
+      "id": "stairs",
+      "name": "Stairs"
+    },
+    {
+      "id": "stairs-h",
+      "name": "Stairs (Horizontal)"
+    },
+    {
+      "id": "stalagmites",
+      "name": "Stalagmites"
+    },
+    {
+      "id": "start-hex",
+      "name": "Start Hex"
+    },
+    {
+      "id": "stone-door",
+      "name": "Stone Door"
+    },
+    {
+      "id": "stone-door-h",
+      "name": "Stone Door (Horizontal)"
+    },
+    {
+      "id": "stone-pillar",
+      "name": "Stone Pillar"
+    },
+    {
+      "id": "stump",
+      "name": "Stump"
+    },
+    {
+      "id": "table-2h",
+      "name": "Table (2 hexes)",
+      "hexes": 2
+    },
+    {
+      "id": "thorns",
+      "name": "Thorns"
+    },
+    {
+      "id": "totem",
+      "name": "Totem"
+    },
+    {
+      "id": "treasure",
+      "name": "Treasure"
+    },
+    {
+      "id": "treasure-h",
+      "name": "Treasure (Horizontal)",
+      "isHorizontal": true
+    },
+    {
+      "id": "tree-3h",
+      "name": "Tree (3 hexes)",
+      "hexes": 3
+    },
+    {
+      "id": "wall-section-2h",
+      "name": "Wall Section (2 hexes)",
+      "hexes": 2
+    },
+    {
+      "id": "water",
+      "name": "Water"
+    },
+    {
+      "id": "wood-door-closed",
+      "name": "Wood Door"
+    },
+    {
+      "id": "wood-door-closed-h",
+      "name": "Wood Door (Horizontal)"
+    }
+  ]
+}

@@ -90,16 +90,17 @@ class Map extends PureComponent {
     }
   }
 
-  handleItemPlopped = (id, type, x, y, rotation) => {
+  handleItemPlopped = (item, type, x, y, rotation) => {
     const scenario = this.scenario.current;
 
     if (type === 'tile') {
-      scenario.placeTile(id, x, y, rotation).then(() => scenario.connectPlacedTileIfPossible(id));
+      scenario.placeTile(item, x, y, rotation)
+        .then(() => scenario.connectPlacedTileIfPossible(item.id));
     } else if (type === 'monster') {
-      scenario.placeMonster(id, x, y);
+      scenario.placeMonster(item, x, y);
     } else if (type === 'token') {
       const { hoveredTile: { rotation: tileRotation } } = this.state;
-      scenario.placeToken(id, x, y, rotation - tileRotation);
+      scenario.placeToken(item, x, y, rotation - tileRotation);
     }
   }
 

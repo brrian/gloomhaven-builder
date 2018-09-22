@@ -2,13 +2,13 @@ import classNames from 'classnames';
 import { List } from 'immutable';
 import { upperFirst } from 'lodash';
 import React, { Component, createRef, Fragment } from 'react';
-import data from './data.json';
+import assetData from '../../assets.json';
 import './Plopper.css';
 
 class Plopper extends Component {
   state = {
     listItems: [],
-    listSelected: '',
+    listSelected: false,
     listVisible: false,
     listX: 0,
     listY: 0,
@@ -49,19 +49,19 @@ class Plopper extends Component {
 
   get src() {
     const { hoveredTile: { orientation } } = this.props;
-    const { id, type } = this.state;
+    const { listSelected, type } = this.state;
 
-    const fileName = type === 'monster' ? `${id}-${orientation}` : id;
+    const fileName = type === 'monster' ? `${listSelected.id}-${orientation}` : listSelected.id;
 
     return `images/${type}s/${fileName}.png`;
   }
 
   handleMouseClick = ({ shiftKey }) => {
     const {
-      id,
+      listSelected,
       plopperRotation,
       plopperVisible,
-      type
+      type,
     } = this.state;
 
     const {
@@ -78,7 +78,7 @@ class Plopper extends Component {
       (type !== 'tile' && hoveredTile.name === false)
     ) { return; }
 
-    handleItemPlopped(id, type, x, y, plopperRotation);
+    handleItemPlopped(listSelected, type, x, y, plopperRotation);
 
     if (type === 'tile' || shiftKey === false) {
       this.setState({ plopperVisible: false });
@@ -141,7 +141,7 @@ class Plopper extends Component {
   showList(type) {
     const { x, y } = this.props;
 
-    const listItems = List(data[`${type}s`]);
+    const listItems = List(assetData[`${type}s`]);
 
     this.setState({
       listItems,
@@ -223,7 +223,6 @@ class Plopper extends Component {
     }
 
     this.setState({
-      id: plopperId,
       listVisible: false,
       plopperRotation,
       plopperVisible: true,
