@@ -87,6 +87,10 @@ class Plopper extends Component {
     const { listVisible, type, plopperVisible } = this.state;
     const { key, shiftKey } = event;
 
+    if (key === 'Escape') {
+      this.hideListOrPlopper();
+    }
+
     if (listVisible) {
       if (key === 'Tab' || key === 'ArrowUp' || key === 'ArrowDown') {
         event.preventDefault();
@@ -126,6 +130,10 @@ class Plopper extends Component {
 
   handleListItemMouseOver = (index) => {
     this.selectListItemIndex(index);
+  }
+
+  hideListOrPlopper() {
+    this.setState({ listVisible: false, plopperVisible: false });
   }
 
   showList(type) {
