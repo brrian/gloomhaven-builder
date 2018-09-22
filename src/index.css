@@ -63,6 +63,10 @@ body {
   margin-bottom: -115.5px;
 }
 
+.Token.isOverlay {
+  z-index: 11;
+}
+
 .Token[data-hexes="2"] {
   width: 390px;
   height: 242px;

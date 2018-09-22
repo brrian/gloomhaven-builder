@@ -89,17 +89,17 @@
       ],
       "tokens":[
         {
-          "name":"start-hex-h",
+          "id":"start-hex-h",
           "pos":[ 3, 1 ],
           "rotation":90
         },
         {
-          "name":"start-hex-h",
+          "id":"start-hex-h",
           "pos":[ 3, 2 ],
           "rotation":90
         },
         {
-          "name":"start-hex-h",
+          "id":"start-hex-h",
           "pos":[
             4,
             1
@@ -108,7 +108,7 @@
           "center":true
         },
         {
-          "name":"start-hex-h",
+          "id":"start-hex-h",
           "pos":[
             5,
             1
@@ -116,7 +116,7 @@
           "rotation":90
         },
         {
-          "name":"start-hex-h",
+          "id":"start-hex-h",
           "pos":[
             5,
             2
@@ -124,7 +124,7 @@
           "rotation":90
         },
         {
-          "name":"wood-door-closed",
+          "id":"wood-door-closed",
           "pos":[
             8,
             3
@@ -135,7 +135,7 @@
           ]
         },
         {
-          "name":"wood-door-closed",
+          "id":"wood-door-closed",
           "pos":[
             0,
             3
@@ -147,7 +147,7 @@
           ]
         },
         {
-          "name":"corridor-earth-2h",
+          "id":"corridor-earth-2h",
           "pos":[
             1,
             5
@@ -155,7 +155,7 @@
           "rotation":0
         },
         {
-          "name":"corridor-earth",
+          "id":"corridor-earth",
           "pos":[
             2,
             5
@@ -163,7 +163,7 @@
           "rotation":0
         },
         {
-          "name":"corridor-earth-2h",
+          "id":"corridor-earth-2h",
           "pos":[
             7,
             5
@@ -171,7 +171,7 @@
           "rotation":0
         },
         {
-          "name":"corridor-earth",
+          "id":"corridor-earth",
           "pos":[
             6,
             5
@@ -179,7 +179,7 @@
           "rotation":0
         },
         {
-          "name":"totem",
+          "id":"totem",
           "pos":[
             3,
             6
@@ -187,7 +187,7 @@
           "rotation":0
         },
         {
-          "name":"totem",
+          "id":"totem",
           "pos":[
             4,
             5
@@ -195,7 +195,7 @@
           "rotation":0
         },
         {
-          "name":"totem",
+          "id":"totem",
           "pos":[
             5,
             6
@@ -203,7 +203,7 @@
           "rotation":0
         },
         {
-          "name":"thorns",
+          "id":"thorns",
           "pos":[
             1,
             5
@@ -211,7 +211,7 @@
           "rotation":0
         },
         {
-          "name":"thorns",
+          "id":"thorns",
           "pos":[
             7,
             2
@@ -229,14 +229,14 @@
       ],
       "tokens":[
         {
-          "name":"dark-fog",
+          "id":"dark-fog",
           "pos":[
             4,
             5
           ]
         },
         {
-          "name":"scenario-1",
+          "id":"scenario-1",
           "pos":[
             4,
             5
@@ -244,7 +244,7 @@
           "rotation":90
         },
         {
-          "name":"scenario-a",
+          "id":"scenario-a",
           "pos":[
             4,
             4
@@ -301,14 +301,14 @@
       ],
       "tokens":[
         {
-          "name":"barrel",
+          "id":"barrel",
           "pos":[
             2,
             0
           ]
         },
         {
-          "name":"coin",
+          "id":"coin",
           "pos":[
             1,
             3

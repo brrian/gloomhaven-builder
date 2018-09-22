@@ -868,39 +868,48 @@
     },
     {
       "id": "scenario-2",
-      "name": "Scenario 2"
+      "name": "Scenario 2",
+      "canOverlay": true
     },
     {
       "id": "scenario-3",
-      "name": "Scenario 3"
+      "name": "Scenario 3",
+      "canOverlay": true
     },
     {
       "id": "scenario-4",
-      "name": "Scenario 4"
+      "name": "Scenario 4",
+      "canOverlay": true
     },
     {
       "id": "scenario-5",
-      "name": "Scenario 5"
+      "name": "Scenario 5",
+      "canOverlay": true
     },
     {
       "id": "scenario-a",
-      "name": "Scenario A"
+      "name": "Scenario A",
+      "canOverlay": true
     },
     {
       "id": "scenario-b",
-      "name": "Scenario B"
+      "name": "Scenario B",
+      "canOverlay": true
     },
     {
       "id": "scenario-c",
-      "name": "Scenario C"
+      "name": "Scenario C",
+      "canOverlay": true
     },
     {
       "id": "scenario-d",
-      "name": "Scenario D"
+      "name": "Scenario D",
+      "canOverlay": true
     },
     {
       "id": "scenario-e",
-      "name": "Scenario E"
+      "name": "Scenario E",
+      "canOverlay": true
     },
     {
       "id": "shelf-2h",

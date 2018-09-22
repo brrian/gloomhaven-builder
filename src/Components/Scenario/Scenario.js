@@ -59,14 +59,37 @@ class Scenario extends PureComponent {
 
     const tiles = stateTiles.withMutations(map => {
       Object.values(propTiles).forEach(({ name, monsters, tokens }) => {
-        const monstersMap = Map(keyBy(monsters, 'pos'));
-        const tokensMap = Map(keyBy(tokens, 'pos'));
+        const {
+          monstersMap,
+          tokensMap,
+        } = this.getExistingMonstersAndTokensAsMap(monsters, tokens);
 
         map.setIn([name, 'monsters'], monstersMap).setIn([name, 'tokens'], tokensMap);
       });
     });
 
     this.setState({ tiles });
+  }
+
+  getExistingMonstersAndTokensAsMap(monsters, tokens) {
+    const monstersKey = keyBy(assetData.monsters, 'id');
+    const tokensKey = keyBy(assetData.tokens, 'id');
+
+    const monstersMap = Map(chain(monsters)
+      .map(monster => ({ ...monstersKey[monster.id], ...monster }))
+      .keyBy('pos')
+      .value());
+
+    const tokensMap = Map(chain(tokens)
+      .map(token => ({ ...tokensKey[token.id], ...token }))
+      .reduce((map, cur) => {
+        const key = cur.canOverlay ? `overlay-${cur.pos}` : `${cur.pos}`;
+        map[key] = cur;
+        return map;
+      }, {})
+      .value());
+
+    return { monstersMap, tokensMap };
   }
 
   placeTile(item, x, y, rotation) {
@@ -113,14 +136,19 @@ class Scenario extends PureComponent {
     return this.setState({ tiles: updatedTiles });
   }
 
-  placeToken({ id }, x, y, rotation) {
+  placeToken(item, x, y, rotation) {
     const { hoveredTile } = this.props;
     const { tiles } = this.state;
 
     const pos = this.tileRefs[hoveredTile.name].getHexPosition(x, y);
 
-    const updatedTiles = tiles.setIn([hoveredTile.name, 'tokens', `${pos}`], {
-      name: id,
+    // Some tokens can be overlaid on top of other tokens. In these cases we'll
+    // want to set a special id for the Map so that up to two tokens can be in
+    // the same position (one overlay and one regular token).
+    const mapId = item.canOverlay ? `overlay-${pos}` : `${pos}`;
+
+    const updatedTiles = tiles.setIn([hoveredTile.name, 'tokens', mapId], {
+      ...item,
       pos,
       rotation,
     });
