@@ -20,6 +20,7 @@ class Plopper extends Component {
     super(props);
 
     this.search = createRef();
+    this.select = createRef();
   }
 
   componentDidMount() {
@@ -157,15 +158,16 @@ class Plopper extends Component {
 
     if (listSelected === false) return;
 
-    let index = listSelected.index + (dir === 'next' ? 1 : -1);
+    const index = listItems.findIndex(({ id }) => id === listSelected.id);
+    let newIndex = index + (dir === 'next' ? 1 : -1);
 
-    if (dir === 'next' && index === listItems.size) {
-      index = 0;
-    } else if (dir === 'prev' && index < 0) {
-      index = listItems.size - 1;
+    if (dir === 'next' && newIndex === listItems.size) {
+      newIndex = 0;
+    } else if (dir === 'prev' && newIndex < 0) {
+      newIndex = listItems.size - 1;
     }
 
-    this.selectListItemIndex(index);
+    this.selectListItemIndex(newIndex);
   }
 
   selectListItemIndex(index = 0) {
@@ -174,8 +176,8 @@ class Plopper extends Component {
     const item = listItems.get(index);
 
     this.setState({
-      listSelected: { index, ...item }
-    });
+      listSelected: { ...item },
+    }, this.ensureSelectedListItemIsVisible);
   }
 
   ensureSelectedListItemExists() {
@@ -183,6 +185,24 @@ class Plopper extends Component {
 
     if (!listItems.find(({ id }) => id === listSelected.id)) {
       this.selectListItemIndex();
+    } else {
+      this.ensureSelectedListItemIsVisible();
+    }
+  }
+
+  ensureSelectedListItemIsVisible() {
+    const list = this.select.current;
+    const selected = list.querySelector('.isSelected');
+
+    if (!selected) return;
+
+    const listBounds = list.getBoundingClientRect();
+    const selectedBounds = selected.getBoundingClientRect();
+
+    if (selectedBounds.bottom >= listBounds.bottom) {
+      list.scrollTo(0, list.scrollTop + selectedBounds.bottom - listBounds.bottom);
+    } else if (selectedBounds.top < listBounds.top) {
+      list.scrollTo(0, list.scrollTop + selectedBounds.top - listBounds.top);
     }
   }
 
@@ -254,17 +274,21 @@ class Plopper extends Component {
             <form onSubmit={this.handleSearchSubmit}>
               <input ref={this.search} type="text" onInput={this.handleSearchInput} />
             </form>
-            <ul onClick={this.setPlopperItem}>
+            <div ref={this.select} className="Plopper__Select" onClick={this.setPlopperItem}>
               {listItems.map(({ id, name }, index) => (
-                <li
+                <div
                   key={id}
-                  className={classNames({ isSelected: listSelected && id === listSelected.id })}
+                  className={classNames(
+                    'Plopper__Option',
+                    { isSelected: listSelected && id === listSelected.id }
+                  )}
                   onMouseOver={this.handleListItemMouseOver.bind(this, index)}
                 >
+                  <img src="https://placehold.it/100x100" width="50" height="50" alt=""/>
                   {name}
-                </li>
+                </div>
               ))}
-            </ul>
+            </div>
           </div>
         )}
         {plopperVisible && (

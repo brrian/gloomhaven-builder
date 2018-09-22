@@ -24,6 +24,21 @@
   background-color: #fff;
 }
 
-.Plopper__List .isSelected {
+.Plopper__Select {
+  max-height: 350px;
+  overflow: auto;
+}
+
+.Plopper__Select .isSelected {
   background-color: #cacaff;
+}
+
+.Plopper__Option {
+  display: flex;
+  align-items: center;
+  padding: 10px;
+}
+
+.Plopper__Option img {
+  margin-right: 10px;
 }
