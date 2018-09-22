@@ -186,16 +186,19 @@ class Plopper extends Component {
   }
 
   setPlopperItem = () => {
-    const { hoveredTile: { orientation, rotation } } = this.props;
+    const { hoveredTile: { orientation } } = this.props;
     const { listSelected: { hexes = 1, id, isHorizontal }, type } = this.state;
-
-    let plopperRotation = type === 'token' ? rotation : 0;
 
     // We need to do something special for the start hex
     const plopperId = id === 'start-hex' && orientation === 'h' ? 'start-hex-h' : id;
 
-    if ((isHorizontal || plopperId === 'start-hex-h')) {
-      plopperRotation += 30;
+    let plopperRotation = 0;
+
+    if (type === 'token' && (
+      (!isHorizontal && orientation === 'h' && plopperId !== 'start-hex-h') ||
+      (isHorizontal && orientation === 'v')
+    )) {
+      plopperRotation = 30;
     }
 
     this.setState({
