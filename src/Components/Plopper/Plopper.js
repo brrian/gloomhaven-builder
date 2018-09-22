@@ -1,8 +1,9 @@
 import classNames from 'classnames';
-import React, { createRef, Component, Fragment } from 'react';
+import { List } from 'immutable';
+import { upperFirst } from 'lodash';
+import React, { Component, createRef, Fragment } from 'react';
 import data from './data.json';
 import './Plopper.css';
-import { List } from 'immutable';
 
 class Plopper extends Component {
   state = {
@@ -249,7 +250,7 @@ class Plopper extends Component {
     return (
       <Fragment>
         {listVisible && (
-          <div className="plopper-list" style={{ top: listY, left: listX }}>
+          <div className="Plopper__List" style={{ top: listY, left: listX }}>
             <form onSubmit={this.handleSearchSubmit}>
               <input ref={this.search} type="text" onInput={this.handleSearchInput} />
             </form>
@@ -267,9 +268,9 @@ class Plopper extends Component {
           </div>
         )}
         {plopperVisible && (
-          <div className="plopper-wrapper" style={{ transform }}>
+          <div className="Plopper__ItemWrapper" style={{ transform }}>
             <img
-              className={classNames('plopper', type)}
+              className={classNames('Plopper__Item', upperFirst(type))}
               src={this.src}
               data-hexes={hexes}
               alt=""

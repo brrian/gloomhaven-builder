@@ -1,8 +1,8 @@
-.tile {
+.Tile {
   position: absolute;
 }
 
-.tile .anchor {
+.Tile__Anchor {
   position: absolute;
   width: 75px;
   height: 75px;
@@ -11,101 +11,10 @@
   border-radius: 50%;
 }
 
-.origin {
+.Tile__Origin {
   position: absolute;
   left: 0;
   bottom: 0;
   width: 0px;
   height: 0px;
-}
-
-.monster, .token {
-  position: absolute;
-  z-index: 10;
-  height: 200px;
-  margin-left: -100px;
-  margin-bottom: -100px;
-  transform-origin: center;
-  user-select: none;
-}
-
-.monster {
-  z-index: 1;
-  background-size: 100%;
-  width: 200px;
-  height: 200px;
-}
-
-.monster-type {
-  position: absolute;
-  background-repeat: no-repeat;
-  background-position: center center;
-}
-
-.monster-type-h {
-  bottom: 11.5px;
-  left: 46.5px;
-  width: 106px;
-  height: 41px;
-  background-size: 75px 21px;
-  transform-origin: 53px -48.5px;
-}
-
-.monster-type-v {
-  bottom: 1.5px;
-  left: 53.5px;
-  width: 91px;
-  height: 49px;
-  background-size: 75px 33px;
-  transform-origin: 46px -50.2px;
-}
-
-.monster-type-h[data-type="hidden"] {
-  background-image: url(/images/monsters/type-hidden-h.png);
-}
-
-.monster-type-v[data-type="hidden"] {
-  background-image: url(/images/monsters/type-hidden-v.png);
-}
-
-.monster-type-h[data-type="normal"] {
-  background-image: url(/images/monsters/type-normal-h.png);
-}
-
-.monster-type-v[data-type="normal"] {
-  background-image: url(/images/monsters/type-normal-v.png);
-}
-
-.monster-type-h[data-type="elite"] {
-  background-image: url(/images/monsters/type-elite-h.png);
-}
-
-.monster-type-v[data-type="elite"] {
-  background-image: url(/images/monsters/type-elite-v.png);
-}
-
-.monster-type[data-party="2"] {
-  transform: rotate(120deg);
-}
-
-.monster-type[data-party="3"] {
-  transform: rotate(-120deg);
-}
-
-.token {
-  height: 225px;
-  margin-left: -103.5px;
-  margin-bottom: -115.5px;
-}
-
-.token[data-hexes="2"] {
-  width: 390px;
-  height: 242px;
-  transform-origin: 98.5px 123.5px;
-}
-
-.token[data-hexes="3"] {
-  width: 400px;
-  height: 400px;
-  transform-origin: 103px 284px;
 }

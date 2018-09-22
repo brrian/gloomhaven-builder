@@ -128,7 +128,7 @@ class Map extends PureComponent {
     return (
       <div
         className={classNames(
-          'map__wrapper',
+          'Map__Wrapper',
           { isAbleToPan, isPanning },
         )}
         onMouseDown={this.handleMouseDown}
@@ -143,7 +143,7 @@ class Map extends PureComponent {
           x={mouseX}
           y={mouseY}
         />
-        <div className="map" style={{
+        <div className="Map" style={{
           transform: `translate(${mapX}px, ${mapY}px) scale(${scale})`,
         }}>
           <Scenario

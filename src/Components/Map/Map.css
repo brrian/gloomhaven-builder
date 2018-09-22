@@ -1,4 +1,4 @@
-.map__wrapper {
+.Map__Wrapper {
   position: fixed;
   top: 0;
   left: 0;
@@ -8,18 +8,18 @@
   background: #ccc;
 }
 
-.map__wrapper.isAbleToPan {
+.Map__Wrapper.isAbleToPan {
   cursor: grab;
 }
 
-.map__wrapper.isPanning {
+.Map__Wrapper.isPanning {
   cursor: grabbing;
 }
 
-.map__wrapper.isAbleToPan .map {
+.Map__Wrapper.isAbleToPan .Map {
   pointer-events: none;
 }
 
-.map {
+.Map {
   position: absolute;
 }

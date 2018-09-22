@@ -123,7 +123,7 @@ class Tile extends PureComponent {
 
     return (
       <div
-        className="tile"
+        className="Tile"
         data-tile={name}
         onMouseEnter={handleTileMouseEnter.bind(this, name, rotation, tokenOrientation)}
         onMouseLeave={this.handleTileMouseLeave}
@@ -137,20 +137,19 @@ class Tile extends PureComponent {
           zIndex: 1000 - order,
         }}
       >
-        <div ref={this.origin} className="origin" />
+        <div ref={this.origin} className="Tile__Origin" />
         {anchors.map(([ left, top ], index) => (
           <div
             ref={el => this.anchors[index] = el}
             key={`${top}${left}`}
-            id={`${name}-${index}`}
-            className="anchor"
+            className="Tile__Anchor"
             style={{ top, left }}
           />
         ))}
         {Object.values(monsters).map(({ name, pos, type }) => (
           <div
             key={pos}
-            className="monster"
+            className="Monster"
             style={{
               ...this.getTokenPosition(pos),
               backgroundImage: `url(images/monsters/${name}-${tokenOrientation}.png)`,
@@ -160,7 +159,7 @@ class Tile extends PureComponent {
             {[2, 3, 4].map(party => (
               <div
                 key={party}
-                className={`monster-type monster-type-${tokenOrientation}`}
+                className={`Monster--${tokenOrientation}`}
                 data-party={party}
                 data-type={type[party]}
               />
@@ -173,7 +172,7 @@ class Tile extends PureComponent {
 
           return (
             <img
-              className="token"
+              className="Token"
               data-hexes={hexes}
               key={`${name}${pos}`}
               src={`images/tokens/${name}.png`}

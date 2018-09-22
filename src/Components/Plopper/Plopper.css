@@ -1,4 +1,4 @@
-.plopper-wrapper {
+.Plopper__ItemWrapper {
   position: absolute;
   z-index: 5000;
   opacity: .75;
@@ -6,24 +6,24 @@
   pointer-events: none;
 }
 
-.plopper {
+.Plopper__Item {
   transform: translate(-50%, -50%);
 }
 
-.plopper.monster, .plopper.token {
+.Plopper__Item.Monster, .Plopper__Item.Token {
   transform: translateY(-50%);
 }
 
-.plopper.token[data-hexes="3"] {
+.Plopper__Item.Token[data-hexes="3"] {
   transform: translateY(-70%);
 }
 
-.plopper-list {
+.Plopper__List {
   position: absolute;
   z-index: 5000;
   background-color: #fff;
 }
 
-.plopper-list .isSelected {
+.Plopper__List .isSelected {
   background-color: #cacaff;
 }
