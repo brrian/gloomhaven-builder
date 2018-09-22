@@ -345,12 +345,13 @@
   ],
   "tokens": [
     {
-      "id": "altar-h",
-      "name": "Altar H"
-    },
-    {
       "id": "altar",
       "name": "Altar"
+    },
+    {
+      "id": "altar-h",
+      "name": "Altar (Horizontal)",
+      "isHorizontal": true
     },
     {
       "id": "barrel",
@@ -511,32 +512,28 @@
       "name": "Spike Trap"
     },
     {
-      "id": "stairs-v",
-      "name": "Stairs V"
-    },
-    {
       "id": "stairs",
       "name": "Stairs"
+    },
+    {
+      "id": "stairs-h",
+      "name": "Stairs (Horizontal)"
     },
     {
       "id": "stalagmites",
       "name": "Stalagmites"
     },
     {
-      "id": "start-hex-h",
-      "name": "Start Hex H"
-    },
-    {
       "id": "start-hex",
       "name": "Start Hex"
     },
     {
-      "id": "stone-door-h",
-      "name": "Stone Door H"
-    },
-    {
       "id": "stone-door",
       "name": "Stone Door"
+    },
+    {
+      "id": "stone-door-h",
+      "name": "Stone Door (Horizontal)"
     },
     {
       "id": "stone-pillar",
@@ -560,12 +557,13 @@
       "name": "Totem"
     },
     {
-      "id": "treasure-h",
-      "name": "Treasure H"
-    },
-    {
       "id": "treasure",
       "name": "Treasure"
+    },
+    {
+      "id": "treasure-h",
+      "name": "Treasure (Horizontal)",
+      "isHorizontal": true
     },
     {
       "id": "tree-3h",
@@ -582,12 +580,12 @@
       "name": "Water"
     },
     {
-      "id": "wood-door-closed-h",
-      "name": "Wood Door Closed H"
+      "id": "wood-door-closed",
+      "name": "Wood Door"
     },
     {
-      "id": "wood-door-closed",
-      "name": "Wood Door Closed"
+      "id": "wood-door-closed-h",
+      "name": "Wood Door (Horizontal)"
     }
   ]
 }
