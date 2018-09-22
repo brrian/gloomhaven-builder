@@ -99,8 +99,8 @@ class Tile extends PureComponent {
       anchors,
       handleTileMouseEnter,
       height,
+      id,
       monsters,
-      name,
       order,
       rotation,
       tokens,
@@ -114,11 +114,11 @@ class Tile extends PureComponent {
     return (
       <div
         className="Tile"
-        data-tile={name}
-        onMouseEnter={handleTileMouseEnter.bind(this, name, rotation, tokenOrientation)}
+        data-tile={id}
+        onMouseEnter={handleTileMouseEnter.bind(this, id, rotation, tokenOrientation)}
         onMouseLeave={this.handleTileMouseLeave}
         style={{
-          backgroundImage: `url(images/tiles/${name}.png)`,
+          backgroundImage: `url(images/tiles/${id}.png)`,
           height,
           left: x,
           top: y,
@@ -136,13 +136,13 @@ class Tile extends PureComponent {
             style={{ top, left }}
           />
         ))}
-        {Object.values(monsters).map(({ name, pos, type }) => (
+        {Object.values(monsters).map(({ id, pos, type }) => (
           <div
             key={pos}
             className="Monster"
             style={{
               ...this.getTokenPosition(pos),
-              backgroundImage: `url(images/monsters/${name}-${tokenOrientation}.png)`,
+              backgroundImage: `url(images/monsters/${id}-${tokenOrientation}.png)`,
               transform: `rotate(-${rotation}deg)`,
             }}
           >

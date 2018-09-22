@@ -1,12 +1,12 @@
 {
   "tiles":{
     "l3a": {
-      "name":"l3a",
+      "id":"l3a",
       "rotation":270,
       "visible":true,
       "monsters":[
         {
-          "name":"inox-guard",
+          "id":"inox-guard",
           "pos":[ 1, 3 ],
           "type": {
             "2": "hidden",
@@ -15,7 +15,7 @@
           }
         },
         {
-          "name":"inox-guard",
+          "id":"inox-guard",
           "pos":[2, 3],
           "type": {
             "2": "hidden",
@@ -24,7 +24,7 @@
           }
         },
         {
-          "name":"inox-guard",
+          "id":"inox-guard",
           "pos":[ 2, 4 ],
           "type": {
             "2": "hidden",
@@ -33,7 +33,7 @@
           }
         },
         {
-          "name":"inox-guard",
+          "id":"inox-guard",
           "pos":[ 3, 5 ],
           "type": {
             "2": "normal",
@@ -42,7 +42,7 @@
           }
         },
         {
-          "name":"inox-guard",
+          "id":"inox-guard",
           "pos":[ 4, 4 ],
           "type": {
             "2": "normal",
@@ -51,7 +51,7 @@
           }
         },
         {
-          "name":"inox-guard",
+          "id":"inox-guard",
           "pos":[ 5, 5 ],
           "type": {
             "2": "normal",
@@ -60,7 +60,7 @@
           }
         },
         {
-          "name":"inox-guard",
+          "id":"inox-guard",
           "pos":[ 6, 3 ],
           "type": {
             "2": "hidden",
@@ -69,7 +69,7 @@
           }
         },
         {
-          "name":"inox-guard",
+          "id":"inox-guard",
           "pos":[ 6, 4 ],
           "type": {
             "2": "hidden",
@@ -78,7 +78,7 @@
           }
         },
         {
-          "name":"inox-guard",
+          "id":"inox-guard",
           "pos":[ 7, 3 ],
           "type": {
             "2": "hidden",
@@ -221,7 +221,7 @@
       ]
     },
     "l1b": {
-      "name":"l1b",
+      "id":"l1b",
       "rotation":270,
       "visible":true,
       "monsters":[
@@ -254,7 +254,7 @@
       ]
     },
     "e1b": {
-      "name":"e1b",
+      "id":"e1b",
       "rotation":90,
       "monsters":[
 
@@ -264,7 +264,7 @@
       ]
     },
     "b2a": {
-      "name":"b2a",
+      "id":"b2a",
       "rotation":270,
       "monsters":[
 
@@ -274,11 +274,11 @@
       ]
     },
     "b4a": {
-      "name":"b4a",
+      "id":"b4a",
       "rotation":90,
       "monsters":[
         {
-          "name":"inox-archer",
+          "id":"inox-archer",
           "pos":[ 2, 2 ],
           "type": {
             "2": "hidden",
@@ -287,7 +287,7 @@
           }
         },
         {
-          "name":"inox-guard",
+          "id":"inox-guard",
           "pos":[
             3,
             2
@@ -318,7 +318,7 @@
       ]
     },
     "b1a": {
-      "name":"b1a",
+      "id":"b1a",
       "rotation":270,
       "monsters":[
 
@@ -328,7 +328,7 @@
       ]
     },
     "b3a": {
-      "name":"b3a",
+      "id":"b3a",
       "rotation":90,
       "monsters":[
 

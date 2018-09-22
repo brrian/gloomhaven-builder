@@ -58,13 +58,13 @@ class Scenario extends PureComponent {
     const { tiles: stateTiles } = this.state;
 
     const tiles = stateTiles.withMutations(map => {
-      Object.values(propTiles).forEach(({ name, monsters, tokens }) => {
+      Object.values(propTiles).forEach(({ id, monsters, tokens }) => {
         const {
           monstersMap,
           tokensMap,
         } = this.getExistingMonstersAndTokensAsMap(monsters, tokens);
 
-        map.setIn([name, 'monsters'], monstersMap).setIn([name, 'tokens'], tokensMap);
+        map.setIn([id, 'monsters'], monstersMap).setIn([id, 'tokens'], tokensMap);
       });
     });
 
@@ -121,14 +121,14 @@ class Scenario extends PureComponent {
     });
   }
 
-  placeMonster({ id }, x, y) {
+  placeMonster(item, x, y) {
     const { hoveredTile } = this.props;
     const { tiles } = this.state;
 
     const pos = this.tileRefs[hoveredTile.name].getHexPosition(x, y);
 
     const updatedTiles = tiles.setIn([hoveredTile.name, 'monsters', `${pos}`], {
-      name: id,
+      ...item,
       pos,
       type: { 2: 'normal', 3: 'normal', 4: 'normal' },
     });
@@ -237,9 +237,9 @@ class Scenario extends PureComponent {
             {...tile.toJSON()}
             handleTileMouseEnter={handleTileMouseEnter}
             handleTileMouseLeave={handleTileMouseLeave}
-            key={tile.get('name')}
+            key={tile.get('id')}
             order={index}
-            ref={el => this.tileRefs[tile.get('name')] = el}
+            ref={el => this.tileRefs[tile.get('id')] = el}
             scale={scale}
           />
         )}
