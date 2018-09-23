@@ -1,4 +1,4 @@
-import { Map, OrderedMap } from 'immutable';
+import { Map, OrderedMap, fromJS } from 'immutable';
 import { chain, isEqual, keyBy } from 'lodash';
 import React, { PureComponent } from 'react';
 import assetData from '../../assets.json';
@@ -24,6 +24,26 @@ class Scenario extends PureComponent {
     if (connections.length) {
       this.placeExistingTiles().then(this.placeExistingMonstersAndTokens);
     }
+  }
+
+  handleMonsterTypeClick = (tileId, pos, party) => {
+    const { tiles: prevTiles } = this.state;
+
+    const nextTypes = {
+      hidden: 'normal',
+      normal: 'elite',
+      elite: 'hidden',
+    };
+
+    const typePath = [tileId, 'monsters', `${pos}`, 'type', `${party}`];
+
+    const type = prevTiles.getIn(typePath);
+
+    const updatedType = nextTypes[type];
+
+    const tiles = prevTiles.setIn(typePath, updatedType);
+
+    this.setState({ tiles });
   }
 
   placeExistingTiles() {
@@ -76,8 +96,8 @@ class Scenario extends PureComponent {
     const tokensKey = keyBy(assetData.tokens, 'id');
 
     const monstersMap = Map(chain(monsters)
-      .map(monster => ({ ...monstersKey[monster.id], ...monster }))
-      .keyBy('pos')
+      .map(monster => fromJS({ ...monstersKey[monster.id], ...monster }))
+      .keyBy(monster => monster.get('pos').toJSON())
       .value());
 
     const tokensMap = Map(chain(tokens)
@@ -237,6 +257,7 @@ class Scenario extends PureComponent {
             {...tile.toJSON()}
             handleTileMouseEnter={handleTileMouseEnter}
             handleTileMouseLeave={handleTileMouseLeave}
+            handleMonsterTypeClick={this.handleMonsterTypeClick}
             key={tile.get('id')}
             order={index}
             ref={el => this.tileRefs[tile.get('id')] = el}

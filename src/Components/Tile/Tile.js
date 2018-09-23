@@ -97,9 +97,10 @@ class Tile extends PureComponent {
   render() {
     const {
       anchors,
+      handleMonsterTypeClick,
       handleTileMouseEnter,
       height,
-      id,
+      id: tileId,
       monsters,
       order,
       rotation,
@@ -114,11 +115,11 @@ class Tile extends PureComponent {
     return (
       <div
         className="Tile"
-        data-tile={id}
-        onMouseEnter={handleTileMouseEnter.bind(this, id, rotation, tokenOrientation)}
+        data-tile={tileId}
+        onMouseEnter={handleTileMouseEnter.bind(this, tileId, rotation, tokenOrientation)}
         onMouseLeave={this.handleTileMouseLeave}
         style={{
-          backgroundImage: `url(images/tiles/${id}.png)`,
+          backgroundImage: `url(images/tiles/${tileId}.png)`,
           height,
           left: x,
           top: y,
@@ -136,13 +137,13 @@ class Tile extends PureComponent {
             style={{ top, left }}
           />
         ))}
-        {Object.values(monsters).map(({ id, pos, type }) => (
+        {Object.values(monsters).map(({ id: monsterId, pos, type }) => (
           <div
             key={pos}
             className="Monster"
             style={{
               ...this.getTokenPosition(pos),
-              backgroundImage: `url(images/monsters/${id}-${tokenOrientation}.png)`,
+              backgroundImage: `url(images/monsters/${monsterId}-${tokenOrientation}.png)`,
               transform: `rotate(-${rotation}deg)`,
             }}
           >
@@ -152,6 +153,7 @@ class Tile extends PureComponent {
                 className={`Monster--${tokenOrientation.toUpperCase()}`}
                 data-party={party}
                 data-type={type[party]}
+                onClick={handleMonsterTypeClick.bind(this, tileId, pos, party)}
               />
             ))}
           </div>
@@ -159,15 +161,15 @@ class Tile extends PureComponent {
         {Object.values(tokens).map(({
           canOverlay = false,
           hexes,
-          id,
+          id: tokenId,
           pos,
           rotation: tokenRotation = 0
         }) => (
           <img
             className={classNames('Token', { isOverlay: canOverlay })}
             data-hexes={hexes}
-            key={`${id}${pos}`}
-            src={`images/tokens/${id}.png`}
+            key={`${tokenId}${pos}`}
+            src={`images/tokens/${tokenId}.png`}
             style={{
               ...this.getTokenPosition(pos),
               transform: `rotate(${tokenRotation}deg)`,
