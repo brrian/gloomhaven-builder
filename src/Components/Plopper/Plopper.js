@@ -12,8 +12,8 @@ class Plopper extends Component {
     listVisible: false,
     listX: 0,
     listY: 0,
-    plopperVisible: false,
     plopperRotation: 0,
+    plopperVisible: false,
   };
 
   constructor(props) {
@@ -156,7 +156,7 @@ class Plopper extends Component {
   selectAdjacentListItem(dir) {
     const { listSelected, listItems } = this.state;
 
-    if (listSelected === false) return;
+    if (listSelected === false) { return };
 
     const index = listItems.findIndex(({ id }) => id === listSelected.id);
     let newIndex = index + (dir === 'next' ? 1 : -1);
@@ -194,7 +194,7 @@ class Plopper extends Component {
     const list = this.select.current;
     const selected = list.querySelector('.isSelected');
 
-    if (!selected) return;
+    if (!selected) { return };
 
     const listBounds = list.getBoundingClientRect();
     const selectedBounds = selected.getBoundingClientRect();
@@ -223,10 +223,10 @@ class Plopper extends Component {
     }
 
     this.setState({
+      hexes,
       listVisible: false,
       plopperRotation,
       plopperVisible: true,
-      hexes,
     });
   }
 
@@ -243,7 +243,9 @@ class Plopper extends Component {
     this.setState(({ plopperRotation: prevRotation, type }) => {
       let rotation = type !== 'token' ? 30 : 60;
 
-      if (counterclockwise) rotation *= -1;
+      if (counterclockwise) {
+        rotation *= -1
+      };
 
       return { plopperRotation: prevRotation + rotation };
     });

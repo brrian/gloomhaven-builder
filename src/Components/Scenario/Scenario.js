@@ -30,9 +30,9 @@ class Scenario extends PureComponent {
     const { tiles: prevTiles } = this.state;
 
     const nextTypes = {
+      elite: 'hidden',
       hidden: 'normal',
       normal: 'elite',
-      elite: 'hidden',
     };
 
     const typePath = [tileId, 'monsters', `${pos}`, 'type', `${party}`];
@@ -119,7 +119,9 @@ class Scenario extends PureComponent {
 
       const { anchors, id, width, height } = item;
 
-      if (tiles.has(id)) return resolve();
+      if (tiles.has(id)) {
+        return resolve()
+      };
 
       const { x: absX, y: absY } = getAbsCoords(x, y);
 
@@ -135,8 +137,8 @@ class Scenario extends PureComponent {
       const hooks = anchors.map((pos, index) => ({ tile: id, index }));
 
       this.setState(({ availableConnections, tiles: prevTiles }) => ({
-        tiles: prevTiles.set(id, tile),
         availableConnections: [ ...availableConnections, ...hooks ],
+        tiles: prevTiles.set(id, tile),
       }), resolve);
     });
   }
@@ -190,8 +192,8 @@ class Scenario extends PureComponent {
         const newX = prevTiles.getIn([hook.tile, 'x']) + ((anchorX - hookX) / scale);
         const newY = prevTiles.getIn([hook.tile, 'y']) + ((anchorY - hookY) / scale);
 
-        const tiles = prevTiles.withMutations(tiles => {
-          tiles.setIn([hook.tile, 'x'], newX).setIn([hook.tile, 'y'], newY);
+        const tiles = prevTiles.withMutations(map => {
+          map.setIn([hook.tile, 'x'], newX).setIn([hook.tile, 'y'], newY);
         });
 
         const availableConnections = prevConnections.filter(connection =>
@@ -211,14 +213,14 @@ class Scenario extends PureComponent {
       return prev;
     }, { anchors: [], hooks: [] });
 
-    const anchors = connections.anchors.map(({ tile, index }) => ({
-      connection: { tile, index },
-      bounds: this.tileRefs[tile].anchors[index].getBoundingClientRect(),
+    const anchors = connections.anchors.map(({ tileId, index }) => ({
+      bounds: this.tileRefs[tileId].anchors[index].getBoundingClientRect(),
+      connection: { tileId, index },
     }));
 
-    const hooks = connections.hooks.map(({ tile, index }) => ({
-      connection: { tile, index },
-      bounds: this.tileRefs[tile].anchors[index].getBoundingClientRect(),
+    const hooks = connections.hooks.map(({ tileId, index }) => ({
+      bounds: this.tileRefs[tileId].anchors[index].getBoundingClientRect(),
+      connection: { tileId, index },
     }));
 
     const match = chain(anchors)
