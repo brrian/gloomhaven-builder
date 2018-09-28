@@ -213,14 +213,14 @@ class Scenario extends PureComponent {
       return prev;
     }, { anchors: [], hooks: [] });
 
-    const anchors = connections.anchors.map(({ tileId, index }) => ({
+    const anchors = connections.anchors.map(({ tile: tileId, index }) => ({
       bounds: this.tileRefs[tileId].anchors[index].getBoundingClientRect(),
-      connection: { tileId, index },
+      connection: { tile: tileId, index },
     }));
 
-    const hooks = connections.hooks.map(({ tileId, index }) => ({
+    const hooks = connections.hooks.map(({ tile: tileId, index }) => ({
       bounds: this.tileRefs[tileId].anchors[index].getBoundingClientRect(),
-      connection: { tileId, index },
+      connection: { tile: tileId , index },
     }));
 
     const match = chain(anchors)
