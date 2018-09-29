@@ -1,5 +1,5 @@
-import { Map, OrderedMap, fromJS } from 'immutable';
-import { chain, isEqual, keyBy } from 'lodash';
+import produce from 'immer';
+import { chain, get, isEqual, keyBy, remove, set } from 'lodash';
 import React, { PureComponent } from 'react';
 import assetData from '../../assets.json';
 import Tile from '../Tile/Tile';
@@ -7,7 +7,7 @@ import Tile from '../Tile/Tile';
 class Scenario extends PureComponent {
   state = {
     availableConnections: [],
-    tiles: OrderedMap(),
+    tiles: new Map(),
   };
 
   tileRefs = {};
@@ -35,13 +35,15 @@ class Scenario extends PureComponent {
       normal: 'elite',
     };
 
-    const typePath = [tileId, 'monsters', `${pos}`, 'type', `${party}`];
+    const tiles = new Map(prevTiles);
+    const tile = tiles.get(tileId);
 
-    const type = prevTiles.getIn(typePath);
+    const typePath = `${pos}.type.${party}`;
 
-    const updatedType = nextTypes[type];
-
-    const tiles = prevTiles.setIn(typePath, updatedType);
+    tile.monsters = produce(tile.monsters, draft => {
+      const currentType = get(draft, typePath);
+      set(draft, typePath, nextTypes[currentType]);
+    });
 
     this.setState({ tiles });
   }
@@ -75,41 +77,40 @@ class Scenario extends PureComponent {
 
   placeExistingMonstersAndTokens() {
     const { tiles: propTiles } = this.props;
-    const { tiles: stateTiles } = this.state;
 
-    const tiles = stateTiles.withMutations(map => {
+    this.setState(produce(draft => {
+      const tiles = new Map(draft.tiles);
+
       Object.values(propTiles).forEach(({ id, monsters, tokens }) => {
-        const {
-          monstersMap,
-          tokensMap,
-        } = this.getExistingMonstersAndTokensAsMap(monsters, tokens);
-
-        map.setIn([id, 'monsters'], monstersMap).setIn([id, 'tokens'], tokensMap);
+        const tile = tiles.get(id);
+        tile.monsters = this.convertExistingMonsters(monsters);
+        tile.tokens = this.convertExistingTokens(tokens);
       });
-    });
 
-    this.setState({ tiles });
+      draft.tiles = tiles;
+    }));
   }
 
-  getExistingMonstersAndTokensAsMap(monsters, tokens) {
+  convertExistingMonsters(monsters) {
     const monstersKey = keyBy(assetData.monsters, 'id');
+
+    return chain(monsters)
+      .map(monster => ({ ...monstersKey[monster.id], ...monster }))
+      .keyBy('pos')
+      .value();
+  }
+
+  convertExistingTokens(tokens) {
     const tokensKey = keyBy(assetData.tokens, 'id');
 
-    const monstersMap = Map(chain(monsters)
-      .map(monster => fromJS({ ...monstersKey[monster.id], ...monster }))
-      .keyBy(monster => monster.get('pos').toJSON())
-      .value());
-
-    const tokensMap = Map(chain(tokens)
+    return chain(tokens)
       .map(token => ({ ...tokensKey[token.id], ...token }))
       .reduce((map, cur) => {
         const key = cur.canOverlay ? `overlay-${cur.pos}` : `${cur.pos}`;
         map[key] = cur;
         return map;
       }, {})
-      .value());
-
-    return { monstersMap, tokensMap };
+      .value();
   }
 
   placeTile(item, x, y, rotation) {
@@ -125,61 +126,67 @@ class Scenario extends PureComponent {
 
       const { x: absX, y: absY } = getAbsCoords(x, y);
 
-      const tile = Map({
+      const tile = {
         ...item,
-        monsters: Map(),
+        monsters: [],
         rotation: rotation % 360,
-        tokens: Map(),
+        tokens: [],
         x: absX - (width / 2),
         y: absY - (height / 2),
-      });
+      };
 
       const hooks = anchors.map((pos, index) => ({ tile: id, index }));
 
-      this.setState(({ availableConnections, tiles: prevTiles }) => ({
-        availableConnections: [ ...availableConnections, ...hooks ],
-        tiles: prevTiles.set(id, tile),
+      this.setState(produce(draft => {
+        draft.availableConnections.push(...hooks);
+        draft.tiles.set(id, tile);
       }), resolve);
     });
   }
 
   placeMonster(item, x, y) {
     const { hoveredTile } = this.props;
-    const { tiles } = this.state;
+    const { tiles: prevTiles } = this.state;
 
     const pos = this.tileRefs[hoveredTile.name].getHexPosition(x, y);
 
-    const updatedTiles = tiles.setIn([hoveredTile.name, 'monsters', `${pos}`], {
-      ...item,
-      pos,
-      type: { 2: 'normal', 3: 'normal', 4: 'normal' },
+    const tiles = new Map(prevTiles);
+    const tile = tiles.get(hoveredTile.name);
+
+    tile.monsters = produce(tile.monsters, draftMonsters => {
+      draftMonsters[`${pos}`] = {
+        ...item,
+        pos,
+        type: { 2: 'normal', 3: 'normal', 4: 'normal' },
+      };
     });
 
-    return this.setState({ tiles: updatedTiles });
+    this.setState({ tiles });
   }
 
   placeToken(item, x, y, rotation) {
     const { hoveredTile } = this.props;
-    const { tiles } = this.state;
+    const { tiles: prevTiles } = this.state;
 
     const pos = this.tileRefs[hoveredTile.name].getHexPosition(x, y);
 
     // Some tokens can be overlaid on top of other tokens. In these cases we'll
     // want to set a special id for the Map so that up to two tokens can be in
     // the same position (one overlay and one regular token).
-    const mapId = item.canOverlay ? `overlay-${pos}` : `${pos}`;
+    const id = item.canOverlay ? `overlay-${pos}` : `${pos}`;
 
-    const updatedTiles = tiles.setIn([hoveredTile.name, 'tokens', mapId], {
-      ...item,
-      pos,
-      rotation,
+    const tiles = new Map(prevTiles);
+    const tile = tiles.get(hoveredTile.name);
+
+    tile.tokens = produce(tile.tokens, draftTokens => {
+      draftTokens[id] = { ...item, pos, rotation };
     });
 
-    return this.setState({ tiles: updatedTiles });
+    this.setState({ tiles });
   }
 
   connectTile({ anchor, hook }) {
-    return new Promise((resolve, reject) => {
+    return new Promise(resolve => {
       const { scale } = this.props;
 
       const anchorEl = this.tileRefs[anchor.tile].anchors[anchor.index];
@@ -188,19 +195,15 @@ class Scenario extends PureComponent {
       const { x: anchorX, y: anchorY } = anchorEl.getBoundingClientRect();
       const { x: hookX, y: hookY } = hookEl.getBoundingClientRect();
 
-      this.setState(({ availableConnections: prevConnections, tiles: prevTiles }) => {
-        const newX = prevTiles.getIn([hook.tile, 'x']) + ((anchorX - hookX) / scale);
-        const newY = prevTiles.getIn([hook.tile, 'y']) + ((anchorY - hookY) / scale);
+      this.setState(produce(draft => {
+        const hookTile = draft.tiles.get(hook.tile);
 
-        const tiles = prevTiles.withMutations(map => {
-          map.setIn([hook.tile, 'x'], newX).setIn([hook.tile, 'y'], newY);
-        });
+        hookTile.x += (anchorX - hookX) / scale;
+        hookTile.y += (anchorY - hookY) / scale;
 
-        const availableConnections = prevConnections.filter(connection =>
-          !(isEqual(connection, anchor) || isEqual(connection, hook)));
-
-        return { availableConnections, tiles };
-      }, resolve);
+        remove(draft.availableConnections, connection =>
+          isEqual(connection, anchor) || isEqual(connection, hook));
+      }), resolve);
     });
   }
 
@@ -254,15 +257,15 @@ class Scenario extends PureComponent {
 
     return (
       <div>
-        {tiles.toArray().map((tile, index) =>
+        {Array.from(tiles.values()).map((tile, index) =>
           <Tile
-            {...tile.toJSON()}
+            {...tile}
             handleTileMouseEnter={handleTileMouseEnter}
             handleTileMouseLeave={handleTileMouseLeave}
             handleMonsterTypeClick={this.handleMonsterTypeClick}
-            key={tile.get('id')}
+            key={tile.id}
             order={index}
-            ref={el => this.tileRefs[tile.get('id')] = el}
+            ref={el => this.tileRefs[tile.id] = el}
             scale={scale}
           />
         )}

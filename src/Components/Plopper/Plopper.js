@@ -1,5 +1,4 @@
 import classNames from 'classnames';
-import { List } from 'immutable';
 import { upperFirst } from 'lodash';
 import React, { Component, createRef, Fragment } from 'react';
 import assetData from '../../assets.json';
@@ -141,7 +140,7 @@ class Plopper extends Component {
   showList(type) {
     const { x, y } = this.props;
 
-    const listItems = List(assetData[`${type}s`]);
+    const listItems = assetData[`${type}s`];
 
     this.setState({
       listItems,
@@ -161,10 +160,10 @@ class Plopper extends Component {
     const index = listItems.findIndex(({ id }) => id === listSelected.id);
     let newIndex = index + (dir === 'next' ? 1 : -1);
 
-    if (dir === 'next' && newIndex === listItems.size) {
+    if (dir === 'next' && newIndex === listItems.length) {
       newIndex = 0;
     } else if (dir === 'prev' && newIndex < 0) {
-      newIndex = listItems.size - 1;
+      newIndex = listItems.length - 1;
     }
 
     this.selectListItemIndex(newIndex);
@@ -173,10 +172,8 @@ class Plopper extends Component {
   selectListItemIndex(index = 0) {
     const { listItems } = this.state;
 
-    const item = listItems.get(index);
-
     this.setState({
-      listSelected: { ...item },
+      listSelected: { ...listItems[index] },
     }, this.ensureSelectedListItemIsVisible);
   }
 
