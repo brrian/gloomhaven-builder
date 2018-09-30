@@ -9,25 +9,30 @@ interface TileProps {
   handleTileMouseLeave: () => void;
   height: number;
   id: string;
-  isHorizontal: boolean;
-  monsters: Array<{
-    id: string;
-    pos: number[];
-    type: {
-      [key: string]: string;
-    };
-  }>;
+  isHorizontal?: boolean;
+  monsters: {
+    [key: string]: {
+      id: string;
+      pos: number[];
+      type: {
+        [key: string]: string;
+      };
+    }
+  };
   order: number;
   scale: number;
   startHex: number[];
   rotation: number;
-  tokens: Array<{
-    canOverlay: boolean;
-    hexes: number;
-    id: string;
-    pos: number[];
-    rotation: number;
-  }>;
+  tokens: {
+    [key: string]: {
+      canOverlay?: boolean;
+      isHorizontal?: boolean;
+      hexes?: number;
+      id: string;
+      pos: number[];
+      rotation: number;
+    }
+  };
   width: number;
   x: number;
   y: number;
