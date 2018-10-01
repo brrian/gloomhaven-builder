@@ -1,54 +1,9 @@
 import classNames from 'classnames';
 import React, { createRef, PureComponent } from 'react';
 import './Tile.css';
+import { IProps, IState } from './types';
 
-interface TileProps {
-  anchors: number[][];
-  handleMonsterTypeClick: (tileId: string, pos: number[], party: number) => void;
-  handleTileMouseEnter: (tileId: string, rotation: number, tokenOrientation: string) => void;
-  handleTileMouseLeave: () => void;
-  height: number;
-  id: string;
-  isHorizontal?: boolean;
-  monsters: {
-    [key: string]: {
-      id: string;
-      pos: number[];
-      type: {
-        [key: string]: string;
-      };
-    }
-  };
-  order: number;
-  scale: number;
-  startHex: number[];
-  rotation: number;
-  tokens: {
-    [key: string]: {
-      canOverlay?: boolean;
-      isHorizontal?: boolean;
-      hexes?: number;
-      id: string;
-      pos: number[];
-      rotation: number;
-    }
-  };
-  width: number;
-  x: number;
-  y: number;
-};
-
-interface TileState {
-  tokenHeight: number;
-  tokenOrientation: string;
-  tokenWidth: number;
-}
-
-class Tile extends PureComponent<TileProps, TileState> {
-  public static defaultProps = {
-    monsters: [],
-  };
-
+class Tile extends PureComponent<IProps, IState> {
   public anchors: { [key: string]: HTMLDivElement } = {};
 
   private origin: React.RefObject<HTMLDivElement> = createRef();
