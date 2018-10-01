@@ -7,7 +7,7 @@ import sampleScenario from './sample-scenario.json';
 
 class Map extends PureComponent {
   state = {
-    hoveredTile: { name: false, orientation: 'h', rotation: 0 },
+    hoveredTile: { name: '', orientation: 'h', rotation: 0 },
     isAbleToPan: false,
     isPanning: false,
     mapX: 0,
@@ -38,7 +38,7 @@ class Map extends PureComponent {
 
   handleTileMouseLeave = () => {
     this.setState(({ hoveredTile}) => ({
-      hoveredTile: { ...hoveredTile, name: false }
+      hoveredTile: { ...hoveredTile, name: '' }
     }));
   }
 

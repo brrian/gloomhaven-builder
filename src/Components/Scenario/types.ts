@@ -1,13 +1,11 @@
+import { IHoveredTile } from "../Plopper/types";
+
 export interface IProps {
   connections: IConnectionSet[];
   getAbsCoords: (x: number, y: number) => { x: number, y: number };
   handleTileMouseEnter: (name: string, rotation: number, orientation: string) => void;
   handleTileMouseLeave: () => void;
-  hoveredTile: {
-    name: string;
-    orientation: string;
-    rotation: number;
-  };
+  hoveredTile: IHoveredTile;
   tiles: {
     [key: string]: ITileScenario;
   };
