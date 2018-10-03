@@ -1,6 +1,8 @@
 import { IBaseAsset, ITokenAsset } from "../../assets";
 import { PlopperItem } from "../Plopper/types";
 
+type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>
+
 export interface IMapDefaultProps {
   scenario: IScenario;
 }
@@ -38,10 +40,12 @@ export interface IConnection {
 
 interface ITileScenario {
   id: string;
-  monsters: IMonster[];
+  monsters: MonsterScenario[];
   rotation: number;
-  tokens: IToken[];
+  tokens: TokenScenario[];
 }
+
+export type MonsterScenario = Omit<IMonster, 'name'>;
 
 export interface IMonster extends IBaseAsset {
   pos: number[];
@@ -51,6 +55,8 @@ export interface IMonster extends IBaseAsset {
     4: 'hidden' | 'normal' | 'elite';
   };
 }
+
+export type TokenScenario = Omit<IToken, 'name'>;
 
 export interface IToken extends ITokenAsset {
   pos: number[];

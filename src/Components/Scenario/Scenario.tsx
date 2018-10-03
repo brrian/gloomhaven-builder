@@ -3,7 +3,7 @@ import { chain, find, get, isEqual, keyBy, remove, set } from 'lodash';
 import React, { PureComponent } from 'react';
 import { IBaseAsset, ITileAsset, ITokenAsset } from '../../assets';
 import assetData from '../../assets.json';
-import { IConnection, IConnectionSet, IMonster, IToken } from '../Map/types';
+import { IConnection, IConnectionSet, MonsterScenario, TokenScenario } from '../Map/types';
 import Tile from '../Tile/Tile';
 import { IProps, IState, ITileMap } from './types';
 
@@ -229,7 +229,7 @@ class Scenario extends PureComponent<IProps, IState> {
     }));
   }
 
-  private convertExistingMonsters(monsters: IMonster[]) {
+  private convertExistingMonsters(monsters: MonsterScenario[]) {
     const monstersKey = keyBy(assetData.monsters, 'id');
 
     return chain(monsters)
@@ -238,7 +238,7 @@ class Scenario extends PureComponent<IProps, IState> {
       .value();
   }
 
-  private convertExistingTokens(tokens: IToken[]) {
+  private convertExistingTokens(tokens: TokenScenario[]) {
     const tokensKey = keyBy(assetData.tokens, 'id');
 
     return chain(tokens)
