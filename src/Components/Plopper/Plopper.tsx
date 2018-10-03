@@ -1,6 +1,7 @@
 import classNames from 'classnames';
 import { find, upperFirst } from 'lodash';
 import React, { Component, createRef, Fragment } from 'react';
+import { ITokenAsset } from '../../assets';
 import assetData from '../../assets.json';
 import './Plopper.css';
 import { IProps, IState } from './types';
@@ -274,7 +275,7 @@ class Plopper extends Component<IProps, IState> {
       throw new ReferenceError('Unable to find selected list item');
     }
 
-    const { hexes = 1, id, isHorizontal } = listSelected;
+    const { hexes = 1, id, isHorizontal } = listSelected as ITokenAsset;
 
     // We need to do something special for the start hex
     const plopperId = id === 'start-hex' && orientation === 'h' ? 'start-hex-h' : id;

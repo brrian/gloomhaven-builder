@@ -1,5 +1,8 @@
+import { IBaseAsset, ITileAsset, ITokenAsset } from "../../assets";
+import { IHoveredTile, ItemPlopped } from "../Map/types";
+
 export interface IProps {
-  handleItemPlopped: (item: IPlopperItem, type: string, x: number, y: number, rotation: number) => void;
+  handleItemPlopped: ItemPlopped;
   hoveredTile: IHoveredTile;
   isAbleToPan: boolean;
   scale: number;
@@ -9,9 +12,9 @@ export interface IProps {
 
 export interface IState {
   hexes?: number;
-  listItems: IPlopperItem[];
-  listSource: IPlopperItem[];
-  listSelected?: IPlopperItem;
+  listItems: PlopperItem[];
+  listSource: PlopperItem[];
+  listSelected?: PlopperItem;
   listVisible: boolean;
   listX: number;
   listY: number;
@@ -20,15 +23,4 @@ export interface IState {
   type?: string;
 }
 
-interface IPlopperItem {
-  id: string;
-  name: string;
-  hexes?: number;
-  isHorizontal?: boolean;
-}
-
-export interface IHoveredTile {
-  name: string;
-  orientation: string;
-  rotation: number;
-}
+export type PlopperItem = ITileAsset | ITokenAsset | IBaseAsset;

@@ -1,28 +1,11 @@
 import produce from 'immer';
-import {
-  chain,
-  find,
-  get,
-  isEqual,
-  keyBy,
-  remove,
-  set,
-} from 'lodash';
+import { chain, find, get, isEqual, keyBy, remove, set } from 'lodash';
 import React, { PureComponent } from 'react';
+import { IBaseAsset, ITileAsset, ITokenAsset } from '../../assets';
 import assetData from '../../assets.json';
+import { IConnection, IConnectionSet, IMonster, IToken } from '../Map/types';
 import Tile from '../Tile/Tile';
-import {
-  IBaseAsset,
-  IConnection,
-  IConnectionSet,
-  IMonster,
-  IProps,
-  IState,
-  ITileAsset,
-  ITileMap,
-  IToken,
-  ITokenAsset,
-} from './types';
+import { IProps, IState, ITileMap } from './types';
 
 class Scenario extends PureComponent<IProps, IState> {
   public state: Readonly<IState> = {
@@ -33,7 +16,7 @@ class Scenario extends PureComponent<IProps, IState> {
   public tileRefs = {};
 
   public componentDidMount() {
-    const { connections } = this.props;
+    const { scenario: { connections } } = this.props;
 
     if (connections.length) {
       this.placeExistingTiles().then(this.placeExistingMonstersAndTokens);
@@ -198,7 +181,7 @@ class Scenario extends PureComponent<IProps, IState> {
   }
 
   private placeExistingTiles() {
-    const { connections, tiles } = this.props;
+    const { scenario: { connections, tiles } } = this.props;
 
     const screenXMidpoint = window.innerWidth / 2;
     const screenYMidpoint = window.innerHeight / 2;
@@ -233,7 +216,7 @@ class Scenario extends PureComponent<IProps, IState> {
   }
 
   private placeExistingMonstersAndTokens = () => {
-    const { tiles: propTiles } = this.props;
+    const { scenario: { tiles: propTiles } } = this.props;
 
     this.setState(produce<IState>(draft => {
       Object.values(propTiles).forEach(({ id, monsters, tokens }) => {
